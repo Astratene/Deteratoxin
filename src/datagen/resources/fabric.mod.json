@@ -7,9 +7,9 @@
     "fabric-datagen": [
       {
         "adapter": "kotlin",
-        "value": "org.teamvoided.template.datagen.TemplateData"
+        "value": "org.teamvoided.deteratoxin.datagen.DeteratoxinData"
       }
     ]
   },
-  "mixins": [ "template.datagen.mixins.json" ]
+  "mixins": [ "deteratoxin.datagen.mixins.json" ]
 }

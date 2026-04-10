@@ -51,7 +51,7 @@ dependencies {
     modImplementation(libs.imguimc)
 }
 
-val username = "vDev"
+val username = "Astratene"
 val uuid = iridium.fetchUUID(username) // Dev & vDev will always be null
 
 loom {
@@ -139,7 +139,7 @@ uploadScript {
     debugMode = false
 
     modrinthId = "id"
-    curseId = "0"
+    //curseId = "0"
 
     changelog = File("changelog.md").readText()
 

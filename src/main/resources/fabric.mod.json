@@ -9,21 +9,21 @@
     "main": [
       {
         "adapter": "kotlin",
-        "value": "org.teamvoided.template.Template::init"
+        "value": "org.teamvoided.deteratoxin.Deteratoxin::init"
       }
     ],
     "client": [
       {
         "adapter": "kotlin",
-        "value": "org.teamvoided.template.client.TemplateClient::init"
+        "value": "org.teamvoided.deteratoxin.client.DeteratoxinClient::init"
       }
     ]
   },
   "mixins": [
-    "template.client.mixins.json",
-    "template.mixins.json"
+    "deteratoxin.client.mixins.json",
+    "deteratoxin.mixins.json"
   ],
-  "accessWidener": "template.classtweaker",
+  "accessWidener": "deteratoxin.classtweaker",
   "depends": {
     "java": ">=${java}",
     "minecraft": ">=${min_minecraft} <${max_minecraft}",
@@ -39,5 +39,5 @@
     "discord": "${discord_invite}"
   },
   "license": "${license}",
-  "icon": "assets/template/icon.png"
+  "icon": "assets/deteratoxin/icon.png"
 }
