@@ -19,7 +19,7 @@ import org.teamvoided.deteratoxin.datagen.data.tags.BlockTagsProvider
 import org.teamvoided.deteratoxin.datagen.data.tags.ItemTagsProvider
 import java.util.concurrent.CompletableFuture
 
-object TemplateData : DataGeneratorEntrypoint {
+object DeteratoxinData : DataGeneratorEntrypoint {
 
     override fun getEffectiveModId(): String = Deteratoxin.MODID
 
