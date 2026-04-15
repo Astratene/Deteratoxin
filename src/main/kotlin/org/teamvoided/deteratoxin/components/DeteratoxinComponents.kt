@@ -1,0 +1,26 @@
+package org.teamvoided.deteratoxin.components
+
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
+
+data class KnifeData(val readied: Boolean, val readyTime: Int) : SimpleStorageComponent {
+
+    // this part fixes the constant ticking caused by this data
+    override fun equals(other: Any?): Boolean {
+        return if (other == null || other !is KnifeData) super.equals(other)
+        else true
+    }
+    // this is the end of it
+
+    companion object {
+        val DEFAULT: KnifeData = KnifeData(false, 0)
+        val CODEC = RecordCodecBuilder.create<KnifeData> { builder ->
+            builder.group(
+                Codec.BOOL.fieldOf("INT_VALUE").forGetter { it.readied },
+                Codec.INT.fieldOf("STRING_VALUE").forGetter { it.readyTime }
+//                ,
+//                Codec.BOOL.fieldOf("BOOL_VALUE").forGetter { it.BOOL_VALUE }
+            ).apply(builder, ::KnifeData)
+        }
+    }
+}
