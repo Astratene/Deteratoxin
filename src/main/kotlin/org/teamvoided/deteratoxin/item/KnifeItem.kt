@@ -37,6 +37,8 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
         // add an if function that checks if the knife is 'readied', and makes it ready if it isn't.
         // Let me know if you need help!
 
+        // Check 'DeteratoxinComponents.kt' for the component itself. I set that up for you :3
+
 
         // This is useful for if you want things in previous classes to still happen.
         return super.use(level, player, interactionHand)
