@@ -9,6 +9,8 @@ import net.minecraft.world.item.TieredItem
 import net.minecraft.world.item.Tiers
 import net.minecraft.world.level.Level
 import org.spongepowered.asm.util.Locals
+import org.teamvoided.deteratoxin.components.KnifeData
+import org.teamvoided.deteratoxin.init.DeteratoxinDataComponents
 
 
 // KnifeItem is this class, and TieredItem is the class that this class *extends*. Extending a class lets you take the properties of that class
@@ -24,6 +26,16 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
         player: Player,
         interactionHand: InteractionHand
     ): InteractionResultHolder<ItemStack?>? {
+
+        val data = player.getItemInHand(interactionHand) .getOrDefault(DeteratoxinDataComponents.KNIFE_DATA,
+            KnifeData.DEFAULT)
+        if (data.readied){
+
+        }
+        else{
+            player.getItemInHand(interactionHand) .set(DeteratoxinDataComponents.KNIFE_DATA, KnifeData(true, 100))
+        }
+
 
         // TODO
         // Marking something as 'to do' lets you be notified of it while committing. I'm going to mark things as
