@@ -18,9 +18,15 @@ data class KnifeData(val readied: Boolean, val readyTime: Int) : SimpleStorageCo
             builder.group(
                 Codec.BOOL.fieldOf("INT_VALUE").forGetter { it.readied },
                 Codec.INT.fieldOf("STRING_VALUE").forGetter { it.readyTime }
-//                ,
-//                Codec.BOOL.fieldOf("BOOL_VALUE").forGetter { it.BOOL_VALUE }
             ).apply(builder, ::KnifeData)
         }
     }
 }
+
+// getter:
+// val data = stack.getOrDefault(DeteratoxinDataComponents.KNIFE_DATA, KnifeDataComponent.DEFAULT)
+
+// setter:
+// stack.set(DeteratoxinDataComponents.KnifeData, DataComponent(value1, value2))
+
+// value1 must be a boolean(true/false) and value 2 must always be an integer(1, 2, 3 etc. no decimals)
