@@ -27,15 +27,17 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
         interactionHand: InteractionHand
     ): InteractionResultHolder<ItemStack?>? {
 
-        val data = player.getItemInHand(interactionHand) .getOrDefault(DeteratoxinDataComponents.KNIFE_DATA,
+        val stack = player.getItemInHand(interactionHand)
+        val data = stack.getOrDefault(DeteratoxinDataComponents.KNIFE_DATA,
             KnifeData.DEFAULT)
         if (data.readied){
-
+        // nothing in here for now, this will be where we put a future function to inject the using player
         }
         else{
-            player.getItemInHand(interactionHand) .set(DeteratoxinDataComponents.KNIFE_DATA, KnifeData(true, 100))
+            // The 'ready time' in future will tick down every tick. This will make it so the player has to use the injection within a
+            // set ammount of time. 100 ticks = 5 seconds.
+            stack.set(DeteratoxinDataComponents.KNIFE_DATA, KnifeData(true, 100))
         }
-
 
         // TODO
         // Marking something as 'to do' lets you be notified of it while committing. I'm going to mark things as
