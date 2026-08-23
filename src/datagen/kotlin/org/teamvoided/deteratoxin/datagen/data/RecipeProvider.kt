@@ -13,12 +13,12 @@ import java.util.concurrent.CompletableFuture
 class RecipeProvider(o: FabricDataOutput, p: CompletableFuture<HolderLookup.Provider>) : FabricRecipeProvider(o, p) {
 
     override fun buildRecipes(e: RecipeOutput) {
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, DeteratoxinItems.APPLE_2)
-            .requires(Items.APPLE)
-            .requires(Items.APPLE)
-            .unlockedBy("has_apple", has(Items.APPLE))
-            .unlockedBy("has_apple_2", has(DeteratoxinItems.APPLE_2))
-            .save(e)
+//        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, DeteratoxinItems.APPLE_2)
+//            .requires(Items.APPLE)
+//            .requires(Items.APPLE)
+//            .unlockedBy("has_apple", has(Items.APPLE))
+//            .unlockedBy("has_apple_2", has(DeteratoxinItems.APPLE_2))
+//            .save(e)
     }
 
 }

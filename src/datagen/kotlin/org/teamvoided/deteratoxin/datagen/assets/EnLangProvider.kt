@@ -19,6 +19,27 @@ class EnLangProvider(var output: FabricDataOutput, p: CompletableFuture<HolderLo
             trySafe { gen.add(it.value(), genLang(it.key().location())) }
         }
 
+        gen.add(
+            "tooltip.deteratoxin.empty.tooltip",
+            "Right click with a potion or material to apply its effect."
+        )
+        gen.add(
+            "tooltip.deteratoxin.instructionToReady.tooltip",
+            "Right click in your hand to ready the knife"
+        )
+        gen.add(
+            "tooltip.deteratoxin.instructionToStab.tooltip",
+            "Attack someone to inject contents into them, right click to inject them into yourself."
+        )
+        gen.add(
+            "tooltip.deteratoxin.currentEffect.tooltip",
+            "Current Effect: %s %s (%s)"
+        )
+        gen.add(
+            "tooltip.deteratoxin.currentInstantEffect.tooltip",
+            "Current Effect: %s. uses: %s"
+        )
+        gen.add("death.attack.stabbed", "%s drove their knife too deep")
     }
 
     private fun genLang(id: ResourceLocation): String =

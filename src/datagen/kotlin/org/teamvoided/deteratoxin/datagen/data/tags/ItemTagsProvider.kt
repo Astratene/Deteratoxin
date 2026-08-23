@@ -16,15 +16,15 @@ class ItemTagsProvider(o: FabricDataOutput, p: CompletableFuture<HolderLookup.Pr
     ItemTagProvider(o, p, blockTag) {
 
     override fun addTags(lookup: HolderLookup.Provider) {
-        copy(DeteratoxinBlockTags.APPLE_LIKE, DeteratoxinItemTags.APPLE_LIKE)
-        copy(ConventionalBlockTags.STORAGE_BLOCKS, ConventionalItemTags.STORAGE_BLOCKS)
+//        copy(DeteratoxinBlockTags.APPLE_LIKE, DeteratoxinItemTags.APPLE_LIKE)
+//        copy(ConventionalBlockTags.STORAGE_BLOCKS, ConventionalItemTags.STORAGE_BLOCKS)
 
-        getOrCreateTagBuilder(ItemTags.SWORD_ENCHANTABLE)
-            .add(DeteratoxinBlocks.APPLE_BLOCK.asItem())
-        getOrCreateTagBuilder(DeteratoxinItemTags.APPLE_LIKE)
-            .add(DeteratoxinItems.APPLE_2)
-        getOrCreateTagBuilder(ConventionalItemTags.HIDDEN_FROM_RECIPE_VIEWERS)
-            .add(DeteratoxinItems.APPLE_2)
+//        getOrCreateTagBuilder(ItemTags.SWORD_ENCHANTABLE)
+//            .add(DeteratoxinBlocks.APPLE_BLOCK.asItem())
+//        getOrCreateTagBuilder(DeteratoxinItemTags.APPLE_LIKE)
+//            .add(DeteratoxinItems.APPLE_2)
+//        getOrCreateTagBuilder(ConventionalItemTags.HIDDEN_FROM_RECIPE_VIEWERS)
+//            .add(DeteratoxinItems.APPLE_2)
     }
 
 }

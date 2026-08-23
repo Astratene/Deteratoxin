@@ -13,14 +13,14 @@ import java.util.concurrent.CompletableFuture
 class BlockTagsProvider(o: FabricDataOutput, p: CompletableFuture<HolderLookup.Provider>) : BlockTagProvider(o, p) {
 
     override fun addTags(lookup: HolderLookup.Provider) {
-        getOrCreateTagBuilder(BlockTags.LOGS)
-            .add(DeteratoxinBlocks.SPECIAL_APPLE_BLOCK)
-
-        getOrCreateTagBuilder(DeteratoxinBlockTags.APPLE_LIKE)
-            .add(DeteratoxinBlocks.APPLE_BLOCK, Blocks.RED_TERRACOTTA)
-
-        getOrCreateTagBuilder(ConventionalBlockTags.STORAGE_BLOCKS)
-            .forceAddTag(DeteratoxinBlockTags.APPLE_LIKE)
+//        getOrCreateTagBuilder(BlockTags.LOGS)
+//            .add(DeteratoxinBlocks.SPECIAL_APPLE_BLOCK)
+//
+//        getOrCreateTagBuilder(DeteratoxinBlockTags.APPLE_LIKE)
+//            .add(DeteratoxinBlocks.APPLE_BLOCK, Blocks.RED_TERRACOTTA)
+//
+//        getOrCreateTagBuilder(ConventionalBlockTags.STORAGE_BLOCKS)
+//            .forceAddTag(DeteratoxinBlockTags.APPLE_LIKE)
     }
 
 }

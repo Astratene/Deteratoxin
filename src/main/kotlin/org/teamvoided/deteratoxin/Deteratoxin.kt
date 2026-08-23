@@ -6,7 +6,9 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.teamvoided.deteratoxin.config.DeteratoxinConfig
 import org.teamvoided.deteratoxin.init.DeteratoxinBlocks
+import org.teamvoided.deteratoxin.init.DeteratoxinDataComponents
 import org.teamvoided.deteratoxin.init.DeteratoxinItems
+import org.teamvoided.deteratoxin.init.DeteratoxinRegistries
 
 object Deteratoxin {
 
@@ -22,6 +24,8 @@ object Deteratoxin {
         log.info("Hello from Common ${config.commonEntry.get()}")
         DeteratoxinItems.init()
         DeteratoxinBlocks.init()
+        DeteratoxinDataComponents.init()
+        DeteratoxinRegistries.init()
     }
 
     fun id(namespace: String, path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(namespace, path)

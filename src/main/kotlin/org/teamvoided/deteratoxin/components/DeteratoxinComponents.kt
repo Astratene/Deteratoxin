@@ -16,8 +16,8 @@ data class KnifeData(val readied: Boolean, val readyTime: Int) : SimpleStorageCo
         val DEFAULT: KnifeData = KnifeData(false, 0)
         val CODEC = RecordCodecBuilder.create<KnifeData> { builder ->
             builder.group(
-                Codec.BOOL.fieldOf("INT_VALUE").forGetter { it.readied },
-                Codec.INT.fieldOf("STRING_VALUE").forGetter { it.readyTime }
+                Codec.BOOL.fieldOf("readied").forGetter { it.readied },
+                Codec.INT.fieldOf("ready_time").forGetter { it.readyTime }
             ).apply(builder, ::KnifeData)
         }
     }

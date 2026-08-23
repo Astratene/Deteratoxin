@@ -14,8 +14,8 @@ object DeteratoxinBlocks {
 
     val BLOCKS get() = getModEntries(BuiltInRegistries.BLOCK)
 
-    val APPLE_BLOCK = register("apple_block", Block(ofFullCopy(Blocks.RED_TERRACOTTA)))
-    val SPECIAL_APPLE_BLOCK = registerNoItem("special_apple_block", Block(ofFullCopy(Blocks.NETHERITE_BLOCK)))
+//    val APPLE_BLOCK = register("apple_block", Block(ofFullCopy(Blocks.RED_TERRACOTTA)))
+//    val SPECIAL_APPLE_BLOCK = registerNoItem("special_apple_block", Block(ofFullCopy(Blocks.NETHERITE_BLOCK)))
 
     fun init() = Unit
 
