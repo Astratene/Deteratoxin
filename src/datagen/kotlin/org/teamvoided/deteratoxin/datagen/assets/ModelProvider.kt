@@ -13,8 +13,7 @@ import org.teamvoided.deteratoxin.init.DeteratoxinItems
 class ModelProvider(o: FabricDataOutput) : FabricModelProvider(o) {
 
     override fun generateBlockStateModels(gen: BlockModelGenerators) {
-//        gen.createTrivialCube(DeteratoxinBlocks.APPLE_BLOCK)
-//        gen.createTrivialBlock(DeteratoxinBlocks.SPECIAL_APPLE_BLOCK, TexturedModel.LEAVES)
+        //gen.createTrivialCube(DeteratoxinBlocks.STARLETTE_LILY)
     }
 
     val single = listOf(DeteratoxinItems.KNIFE)

@@ -10,8 +10,11 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EquipmentSlotGroup
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.SlotAccess
+import net.minecraft.world.entity.ai.attributes.AttributeModifier
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.ClickAction
 import net.minecraft.world.inventory.Slot
@@ -20,9 +23,11 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.LingeringPotionItem
 import net.minecraft.world.item.PotionItem
 import net.minecraft.world.item.SplashPotionItem
+import net.minecraft.world.item.Tier
 import net.minecraft.world.item.TieredItem
 import net.minecraft.world.item.Tiers
 import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.item.component.ItemAttributeModifiers
 import net.minecraft.world.level.Level
 import org.teamvoided.deteratoxin.components.KnifeData
 import org.teamvoided.deteratoxin.data.registry.DeteratoxinDamageTypes
@@ -38,11 +43,6 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 
-// KnifeItem is this class, and TieredItem is the class that this class *extends*. Extending a class lets you take the properties of that class
-// And override different parts. Adding and replacing stuff that has already been done in other classes is the core of
-// Functional/class based programming languages like java and kotlin.
-
-// You can ctrl + click 'TieredItem' to go to that class.
 class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
 
     override fun hurtEnemy(itemStack: ItemStack, target: LivingEntity, user: LivingEntity): Boolean {
@@ -603,5 +603,25 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
         }
 
         super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag)
+    }
+
+    companion object {
+        fun createAttributes(
+            material: Tier,
+            baseAttackDamageModifier: Int,
+            attackSpeedModifier: Float,
+        ): ItemAttributeModifiers {
+            return ItemAttributeModifiers.builder().add(
+                Attributes.ATTACK_DAMAGE, AttributeModifier(
+                    BASE_ATTACK_DAMAGE_ID,
+                    (baseAttackDamageModifier.toFloat() + material.attackDamageBonus).toDouble(),
+                    AttributeModifier.Operation.ADD_VALUE
+                ), EquipmentSlotGroup.MAINHAND
+            ).add(
+                Attributes.ATTACK_SPEED, AttributeModifier(
+                    BASE_ATTACK_SPEED_ID, attackSpeedModifier.toDouble(), AttributeModifier.Operation.ADD_VALUE
+                ), EquipmentSlotGroup.MAINHAND
+            ).build()
+        }
     }
 }

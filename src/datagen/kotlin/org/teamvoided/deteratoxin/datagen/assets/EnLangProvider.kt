@@ -40,6 +40,8 @@ class EnLangProvider(var output: FabricDataOutput, p: CompletableFuture<HolderLo
             "Current Effect: %s. uses: %s"
         )
         gen.add("death.attack.stabbed", "%s drove their knife too deep")
+
+        gen.add("effect.deteratoxin.weak_deteratoxin", "deteratoxin")
     }
 
     private fun genLang(id: ResourceLocation): String =

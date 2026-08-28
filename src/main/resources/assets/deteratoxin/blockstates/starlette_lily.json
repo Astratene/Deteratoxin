@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "deteratoxin:block/starlette_lily",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "deteratoxin:block/starlette_lily",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "deteratoxin:block/starlette_lily",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "deteratoxin:block/starlette_lily",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "deteratoxin:block/starlette_lily"
+    },
+    "facing=west": {
+      "model": "deteratoxin:block/starlette_lily",
+      "x": 90,
+      "y": 270
+    }
+  }
+}
