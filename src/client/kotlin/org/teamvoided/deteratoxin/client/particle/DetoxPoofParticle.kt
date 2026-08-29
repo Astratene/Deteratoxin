@@ -6,6 +6,7 @@ import net.minecraft.client.particle.ParticleRenderType
 import net.minecraft.client.particle.TextureSheetParticle
 import net.minecraft.client.particle.SpriteSet
 import net.minecraft.client.multiplayer.ClientLevel
+import net.minecraft.client.renderer.LightTexture
 import net.minecraft.core.particles.SimpleParticleType
 
 class DetoxPoofParticle (
@@ -26,11 +27,11 @@ class DetoxPoofParticle (
         this.zd = velocityZ * 0.8
         setSpriteFromAge(provider)
         lifetime = 22
+        this.alpha = 0.5f
     }
 
     override fun tick() {
         super.tick()
-        this.alpha = 0.5f
         setSpriteFromAge(provider)
     }
 
@@ -43,7 +44,7 @@ class DetoxPoofParticle (
     }
 
     override fun getLightColor(tint: Float): Int {
-        return 15728880
+        return LightTexture.FULL_BRIGHT
     }
 
     override fun getRenderType(): ParticleRenderType? {

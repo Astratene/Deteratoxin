@@ -8,6 +8,7 @@ import net.minecraft.data.models.ItemModelGenerators
 import net.minecraft.data.models.model.ModelTemplates
 import net.minecraft.data.models.model.TexturedModel
 import org.teamvoided.deteratoxin.init.DeteratoxinBlocks
+import org.teamvoided.deteratoxin.init.DeteratoxinEntities
 import org.teamvoided.deteratoxin.init.DeteratoxinItems
 
 class ModelProvider(o: FabricDataOutput) : FabricModelProvider(o) {
@@ -16,11 +17,11 @@ class ModelProvider(o: FabricDataOutput) : FabricModelProvider(o) {
         //gen.createTrivialCube(DeteratoxinBlocks.STARLETTE_LILY)
     }
 
-    val single = listOf(DeteratoxinItems.KNIFE)
+    val single = listOf(DeteratoxinItems.DETERATOXIN_EXTRACT, DeteratoxinItems.POTENT_DETERATOXIN_EXTRACT)
 
     override fun generateItemModels(gen: ItemModelGenerators) {
         single.forEach {
-            //gen.generateFlatItem(it, ModelTemplates.FLAT_HANDHELD_ITEM)
+            gen.generateFlatItem(it, ModelTemplates.FLAT_ITEM)
         }
     }
 

@@ -7,6 +7,8 @@ import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
 import org.teamvoided.deteratoxin.data.registry.DeteratoxinDamageTypes
+import org.teamvoided.deteratoxin.init.DeteratoxinEffects
+import org.teamvoided.deteratoxin.init.DeteratoxinItems
 import org.teamvoided.deteratoxin.item.KnifeIngredient
 import org.teamvoided.deteratoxin.item.KnifeIngredient.Companion.getKey
 
@@ -50,6 +52,8 @@ object KnifeIngredients : RegistryBootstrapper<KnifeIngredient> {
         knifeIngredient(Items.ENCHANTED_GOLDEN_APPLE, MobEffects.ABSORPTION, 1200, 3)
         knifeIngredient(Items.POISONOUS_POTATO, MobEffects.POISON, 100, 0)
         knifeIngredient(Items.CHICKEN, MobEffects.HUNGER, 200, 0)
+
+        knifeIngredient(DeteratoxinItems.DETERATOXIN_EXTRACT, DeteratoxinEffects.WEAK_DETERATOXIN, 500, 3)
     }
 
     fun BootstrapContext<KnifeIngredient>.knifeIngredient(

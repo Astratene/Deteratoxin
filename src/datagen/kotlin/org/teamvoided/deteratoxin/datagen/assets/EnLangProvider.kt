@@ -41,6 +41,10 @@ class EnLangProvider(var output: FabricDataOutput, p: CompletableFuture<HolderLo
         )
         gen.add("death.attack.stabbed", "%s drove their knife too deep")
 
+        gen.add("death.attack.detox", "%s de-toxed")
+        gen.add("death.attack.drinknt", "%s shouldn't have drank that")
+        gen.add("death.attack.drinketh", "%s drank the juice that kills them")
+
         gen.add("effect.deteratoxin.weak_deteratoxin", "deteratoxin")
     }
 

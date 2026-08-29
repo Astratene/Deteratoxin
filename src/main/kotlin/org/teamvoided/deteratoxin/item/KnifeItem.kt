@@ -32,6 +32,7 @@ import net.minecraft.world.level.Level
 import org.teamvoided.deteratoxin.components.KnifeData
 import org.teamvoided.deteratoxin.data.registry.DeteratoxinDamageTypes
 import org.teamvoided.deteratoxin.init.DeteratoxinDataComponents
+import org.teamvoided.deteratoxin.init.DeteratoxinEffects
 import org.teamvoided.deteratoxin.init.DeteratoxinRegistries
 import org.teamvoided.deteratoxin.item.KnifeIngredient.Companion.getKey
 import org.teamvoided.deteratoxin.util.customDamage
@@ -82,7 +83,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                                 stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
                             }
                         } else {
-                            val maxDuration = max(100, 600 / (knifeAmp + 1))
+                            val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.WEAK_DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
                             if (knifeDur < maxDuration) {
                                 target.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
                                 stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
@@ -116,7 +117,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                                         stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
                                     }
                                 } else {
-                                    val maxDuration = max(100, 600 / (knifeAmp + 1))
+                                    val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.WEAK_DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
                                     if (knifeDur < maxDuration && (knifeDur > eff.duration || knifeAmp > eff.amplifier)) {
                                         target.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
                                         stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
@@ -149,7 +150,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                                         stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
                                     }
                                 } else {
-                                    val maxDuration = max(100, 600 / (knifeAmp + 1))
+                                    val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.WEAK_DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
                                     if (knifeDur < maxDuration) {
                                         target.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
                                         stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
@@ -223,7 +224,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                                 stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
                             }
                         } else {
-                            val maxDuration = max(100, 600 / (knifeAmp + 1))
+                            val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.WEAK_DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
                             if (knifeDur < maxDuration) {
                                 player.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
                                 stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
@@ -257,7 +258,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                                         stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
                                     }
                                 } else {
-                                    val maxDuration = max(100, 600 / (knifeAmp + 1))
+                                    val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.WEAK_DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
                                     if (knifeDur < maxDuration && (knifeDur > eff.duration || knifeAmp > eff.amplifier)) {
                                         player.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
                                         stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
@@ -290,7 +291,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                                         stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
                                     }
                                 } else {
-                                    val maxDuration = max(100, 600 / (knifeAmp + 1))
+                                    val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.WEAK_DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
                                     if (knifeDur < maxDuration) {
                                         player.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
                                         stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
