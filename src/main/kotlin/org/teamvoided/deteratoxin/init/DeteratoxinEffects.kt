@@ -11,16 +11,20 @@ import org.teamvoided.deteratoxin.effects.DeteratoxinBasicEffect
 import org.teamvoided.deteratoxin.util.registerHolder
 
 object DeteratoxinEffects {
-    fun init() = Unit
 
+    @JvmField
     val WEAK_DETERATOXIN = register(
         "weak_deteratoxin", DeteratoxinBasicEffect(MobEffectCategory.BENEFICIAL, 0xdb2d00)
             .addAttributeModifier(
-                Attributes.MAX_HEALTH, id("effect.weak_deteratoxin"),
+                Attributes.MAX_HEALTH, DeteratoxinBasicEffect.DETOX_ATTRIBUTE,
                 (-1.0), AttributeModifier.Operation.ADD_VALUE
             )
     )
 
-    private fun register(id: String, entry: MobEffect): Holder<MobEffect> =
-        BuiltInRegistries.MOB_EFFECT.registerHolder(id(id), entry)
+    fun init() = Unit
+
+    fun register(id: String, entry: MobEffect): Holder<MobEffect> {
+        return BuiltInRegistries.MOB_EFFECT.registerHolder(id(id), entry)
+    }
+
 }

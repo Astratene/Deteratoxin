@@ -4,7 +4,7 @@
   "package": "org.teamvoided.deteratoxin.mixin.client",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "ExampleMixin"
+    "GuiMixin"
   ],
   "injectors": {
     "defaultRequire": 1
