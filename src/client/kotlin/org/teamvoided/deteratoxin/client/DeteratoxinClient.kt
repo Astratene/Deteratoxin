@@ -15,10 +15,7 @@ object DeteratoxinClient {
         BlockRenderLayerMap.INSTANCE.putBlock(DeteratoxinBlocks.STARLETTE_LILY, RenderType.cutout())
         Deteratoxin.log.info("Hello from Client")
         DeteratoxinParticlesClient.init()
-        EntityRendererRegistry.register(
-            DeteratoxinEntities.DETERATOXIN_CLOUD,
-            ::NoopRenderer
-        )
+        EntityRendererRegistry.register(DeteratoxinEntities.DETERATOXIN_CLOUD, ::NoopRenderer)
     }
 
 }

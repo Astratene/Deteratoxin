@@ -1,10 +1,8 @@
 package org.teamvoided.deteratoxin.util
 
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.player.Player
 import org.teamvoided.deteratoxin.data.registry.DeteratoxinDamageTypes
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.clearDetox
-import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.clearDetoxCooldown
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getDetox
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getDetoxCooldown
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setDetox
@@ -20,16 +18,19 @@ fun doDetoxStuff(player: LivingEntity) {
         player.setDetoxCooldown(player.getDetoxCooldown() - 1)
         if (player.getDetoxCooldown() <= 0) {
             player.setDetox(player.getDetox() - 1)
-            if (player.getDetox() <= 0){
+            if (player.getDetox() <= 0) {
                 player.clearDetox()
-                player.clearDetoxCooldown()
                 return
             } else {
                 player.setDetoxCooldown(600)
             }
         }
-        if (player.health > player.maxHealth - player.getDetox()){
-            player.customDamage(DeteratoxinDamageTypes.DETERIORATED, player.health - (player.maxHealth - player.getDetox()))
+
+        if (player.health > player.maxHealth - player.getDetox()) {
+            player.customDamage(
+                DeteratoxinDamageTypes.DETERIORATED,
+                player.health - (player.maxHealth - player.getDetox())
+            )
         }
     }
 }
