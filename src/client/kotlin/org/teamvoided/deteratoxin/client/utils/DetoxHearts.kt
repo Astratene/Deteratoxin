@@ -98,30 +98,23 @@ object DetoxHearts {
         val index = healthContainerCount - containerIndex
 
         val immunityIndex = Mth.ceil(immunity / 2.0)
-        val isHalfImmunity = immunity % 2 != 0
         val detoxIndex = Mth.ceil(immunity / 2.0 + detox / 2.0)
-        val potentIndexCount = Mth.ceil(potent / 2.0 + immunity / 2.0 + detox / 2.0)
-        if (potentIndexCount < index) {
+        val potentIndex = Mth.ceil(potent / 2.0 + immunity / 2.0 + detox / 2.0)
+        if (potentIndex < index) {
             return
         }
 
-        val isHalfDetox = (detox + immunity) % 2 != 0
-
-        if (potent != 0) {
-            if (immunityIndex + Mth.floor(detox / 2.0) < index) {
-                val isHalfPotent = (potent + detox + immunity) % 2 != 0
-                renderHeart(this, potentIndexCount == index && isHalfPotent, xo, yo, HType.POTENT)
-            }
+        if (potent != 0 && immunityIndex + Mth.floor(detox / 2.0) < index) {
+            val isHalf = (potent + detox + immunity) % 2 != 0
+            renderHeart(this, potentIndex == index && isHalf, xo, yo, HType.POTENT)
         }
-
-        if (detox != 0) {
-            if (detoxIndex >= index && Mth.floor(immunity / 2.0) < index) {
-                renderHeart(this, detoxIndex == index && isHalfDetox, xo, yo, HType.DETOX)
-            }
+        if (detox != 0 && detoxIndex >= index && Mth.floor(immunity / 2.0) < index) {
+            val isHalf = (detox + immunity) % 2 != 0
+            renderHeart(this, detoxIndex == index && isHalf, xo, yo, HType.DETOX)
         }
-
         if (immunity != 0 && immunityIndex >= index) {
-            renderHeart(this, (immunityIndex == index) && isHalfImmunity, xo, yo, HType.IMMUNITY)
+            val isHalf = immunity % 2 != 0
+            renderHeart(this, immunityIndex == index && isHalf, xo, yo, HType.IMMUNITY)
         }
     }
 
