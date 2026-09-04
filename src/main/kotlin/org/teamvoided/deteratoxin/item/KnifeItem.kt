@@ -2,12 +2,14 @@ package org.teamvoided.deteratoxin.item
 
 
 import net.minecraft.ChatFormatting
+import net.minecraft.core.Holder
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlotGroup
@@ -28,6 +30,7 @@ import net.minecraft.world.item.component.ItemAttributeModifiers
 import net.minecraft.world.level.Level
 import org.teamvoided.deteratoxin.components.KnifeData
 import org.teamvoided.deteratoxin.data.registry.DeteratoxinDamageTypes
+import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getImmunity
 import org.teamvoided.deteratoxin.init.DeteratoxinDataComponents
 import org.teamvoided.deteratoxin.init.DeteratoxinEffects
 import org.teamvoided.deteratoxin.init.DeteratoxinRegistries
@@ -43,11 +46,98 @@ import kotlin.time.toDuration
 
 class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
 
-    override fun hurtEnemy(itemStack: ItemStack, target: LivingEntity, user: LivingEntity): Boolean {
+
+
+    fun applyApplyEffects(
+        stack: ItemStack,
+        target: LivingEntity,
+        knifeEff: Holder<MobEffect>,
+        dur: Int,
+        amp: Int
+    ) {
+        var knifeDur = dur
+        var knifeAmp = amp
+        if (knifeEff.value().isInstantenous) {
+            target.addEffect(MobEffectInstance(knifeEff, 1, 0))
+            knifeDur--
+            if (knifeDur <= 0) {
+                nullAll(stack)
+            } else {
+                stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
+            }
+        } else {
+            val maxDuration = if (knifeEff.`is`(DeteratoxinEffects.DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
+            if (knifeEff.`is`(DeteratoxinEffects.DETERATOXIN) && target.getImmunity() > 12000) {
+                knifeAmp /= 2
+            }
+            if (knifeDur < maxDuration) {
+                target.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
+                nullAll(stack)
+            } else {
+                target.addEffect(MobEffectInstance(knifeEff, maxDuration, knifeAmp))
+                knifeDur -= maxDuration
+                if (knifeDur <= 0) {
+                    nullAll(stack)
+                } else {
+                    stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
+                }
+            }
+        }
+    }
+
+    fun applyEffects(stack: ItemStack, target: LivingEntity, knifeEff: Holder<MobEffect>, dur: Int, amp: Int) {
+        var knifeDur = dur
+        var knifeAmp = amp
+        stack.set(DeteratoxinDataComponents.KNIFE_DATA, KnifeData(false, 0))
+        val targetEffects = target.activeEffects.filter { it.effect == knifeEff }
+        if (targetEffects.isEmpty()) {
+            applyApplyEffects(stack, target, knifeEff, knifeDur, knifeAmp)
+        } else {
+            var newEffect = true
+            for (eff in targetEffects) {
+                if (eff.effect.value() == knifeEff.value()) {
+                    newEffect = false
+                    if (knifeEff.value().isInstantenous) {
+                        target.addEffect(MobEffectInstance(knifeEff, 1, 0))
+                        knifeDur--
+                        if (knifeDur <= 0) {
+                            nullAll(stack)
+                        } else {
+                            stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
+                        }
+                    } else {
+                        val maxDuration =
+                            if (knifeEff.`is`(DeteratoxinEffects.DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
+                        if (knifeEff.`is`(DeteratoxinEffects.DETERATOXIN) && target.getImmunity() > 12000) {
+                            knifeAmp /= 2
+                        }
+                        if (knifeDur < maxDuration && (knifeDur > eff.duration || knifeAmp > eff.amplifier)) {
+                            target.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
+                            nullAll(stack)
+                        } else if (maxDuration > eff.duration || knifeAmp > eff.amplifier) {
+                            target.addEffect(MobEffectInstance(knifeEff, maxDuration, knifeAmp))
+                            knifeDur -= maxDuration
+                            if (knifeDur <= 0) {
+                                nullAll(stack)
+                            } else {
+                                stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
+                            }
+                        }
+                    }
+                }
+            }
+            if (newEffect) {
+                if (targetEffects.isEmpty()) {
+                    applyApplyEffects(stack, target, knifeEff, knifeDur, knifeAmp)
+                }
+            }
+        }
+    }
+
+    override fun hurtEnemy(stack: ItemStack, target: LivingEntity, user: LivingEntity): Boolean {
         if (user is Player) {
-            val stack = itemStack
             val knifeAmp = stack.getOrDefault(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, 0)
-            var knifeDur = stack.getOrDefault(DeteratoxinDataComponents.KNIFE_POTION_DURATION, 0)
+            val knifeDur = stack.getOrDefault(DeteratoxinDataComponents.KNIFE_POTION_DURATION, 0)
             val knifeEff = stack.get(DeteratoxinDataComponents.KNIFE_POTION_EFFECT)
             val data = stack.getOrDefault(
                 DeteratoxinDataComponents.KNIFE_DATA,
@@ -66,126 +156,22 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                         2.0F,
                         2.0f
                     )
-                    stack.set(DeteratoxinDataComponents.KNIFE_DATA, KnifeData(false, 0))
-                    val playerEffects = target.activeEffects.filter { it.effect == knifeEff }
-                    if (playerEffects.isEmpty()) {
-                        if (knifeEff.value().isInstantenous) {
-                            target.addEffect(MobEffectInstance(knifeEff, 1, 0))
-                            knifeDur--
-                            if (knifeDur <= 0) {
-                                stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
-                                stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, null)
-                                stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, null)
-                            } else {
-                                stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
-                            }
-                        } else {
-                            val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
-                            if (knifeDur < maxDuration) {
-                                target.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
-                                stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
-                                stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, null)
-                                stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, null)
-                            } else {
-                                target.addEffect(MobEffectInstance(knifeEff, maxDuration, knifeAmp))
-                                knifeDur -= maxDuration
-                                if (knifeDur <= 0) {
-                                    stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
-                                    stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, null)
-                                    stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, null)
-                                } else {
-                                    stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
-                                }
-                            }
-                        }
-                    } else {
-                        var newEffect = true
-                        for (eff in playerEffects) {
-                            if (eff.effect.value() == knifeEff.value()) {
-                                newEffect = false
-                                if (knifeEff.value().isInstantenous) {
-                                    target.addEffect(MobEffectInstance(knifeEff, 1, 0))
-                                    knifeDur--
-                                    if (knifeDur <= 0) {
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, null)
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, null)
-                                    } else {
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
-                                    }
-                                } else {
-                                    val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
-                                    if (knifeDur < maxDuration && (knifeDur > eff.duration || knifeAmp > eff.amplifier)) {
-                                        target.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, null)
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, null)
-                                    } else if (maxDuration > eff.duration || knifeAmp > eff.amplifier) {
-                                        target.addEffect(MobEffectInstance(knifeEff, maxDuration, knifeAmp))
-                                        knifeDur -= maxDuration
-                                        if (knifeDur <= 0) {
-                                            stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
-                                            stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, null)
-                                            stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, null)
-                                        } else {
-                                            stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if (newEffect) {
-                            if (playerEffects.isEmpty()) {
-                                if (knifeEff.value().isInstantenous) {
-                                    target.addEffect(MobEffectInstance(knifeEff, 1, 0))
-                                    knifeDur--
-                                    if (knifeDur <= 0) {
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, null)
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, null)
-                                    } else {
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
-                                    }
-                                } else {
-                                    val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
-                                    if (knifeDur < maxDuration) {
-                                        target.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, null)
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, null)
-                                    } else {
-                                        target.addEffect(MobEffectInstance(knifeEff, maxDuration, knifeAmp))
-                                        knifeDur -= maxDuration
-                                        if (knifeDur <= 0) {
-                                            stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
-                                            stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, null)
-                                            stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, null)
-                                        } else {
-                                            stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    applyEffects(stack, target, knifeEff, knifeDur, knifeAmp)
                 }
             }
         }
-        return super.hurtEnemy(itemStack, target, user)
+        return super.hurtEnemy(stack, target, user)
     }
 
-    // in order to override a function, you simply put 'override' before it.
     override fun use(
         level: Level,
         player: Player,
         interactionHand: InteractionHand
     ): InteractionResultHolder<ItemStack?>? {
-
-
         if (!player.level().isClientSide) {
             val stack = player.getItemInHand(interactionHand)
             val knifeAmp = stack.getOrDefault(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, 0)
-            var knifeDur = stack.getOrDefault(DeteratoxinDataComponents.KNIFE_POTION_DURATION, 0)
+            val knifeDur = stack.getOrDefault(DeteratoxinDataComponents.KNIFE_POTION_DURATION, 0)
             val knifeEff = stack.get(DeteratoxinDataComponents.KNIFE_POTION_EFFECT)
             val data = stack.getOrDefault(
                 DeteratoxinDataComponents.KNIFE_DATA,
@@ -207,108 +193,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                         2.0f
                     )
                     player.cooldowns.addCooldown(stack.item, 450)
-                    stack.set(DeteratoxinDataComponents.KNIFE_DATA, KnifeData(false, 0))
-                    val playerEffects = player.activeEffects.filter { it.effect == knifeEff }
-                    if (playerEffects.isEmpty()) {
-                        if (knifeEff.value().isInstantenous) {
-                            player.addEffect(MobEffectInstance(knifeEff, 1, 0))
-                            knifeDur--
-                            if (knifeDur <= 0) {
-                                stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
-                                stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, null)
-                                stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, null)
-                            } else {
-                                stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
-                            }
-                        } else {
-                            val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
-                            if (knifeDur < maxDuration) {
-                                player.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
-                                stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
-                                stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, null)
-                                stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, null)
-                            } else {
-                                player.addEffect(MobEffectInstance(knifeEff, maxDuration, knifeAmp))
-                                knifeDur -= maxDuration
-                                if (knifeDur <= 0) {
-                                    stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
-                                    stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, null)
-                                    stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, null)
-                                } else {
-                                    stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
-                                }
-                            }
-                        }
-                    } else {
-                        var newEffect = true
-                        for (eff in playerEffects) {
-                            if (eff.effect.value() == knifeEff.value()) {
-                                newEffect = false
-                                if (knifeEff.value().isInstantenous) {
-                                    player.addEffect(MobEffectInstance(knifeEff, 1, 0))
-                                    knifeDur--
-                                    if (knifeDur <= 0) {
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, null)
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, null)
-                                    } else {
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
-                                    }
-                                } else {
-                                    val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
-                                    if (knifeDur < maxDuration && (knifeDur > eff.duration || knifeAmp > eff.amplifier)) {
-                                        player.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, null)
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, null)
-                                    } else if (maxDuration > eff.duration || knifeAmp > eff.amplifier) {
-                                        player.addEffect(MobEffectInstance(knifeEff, maxDuration, knifeAmp))
-                                        knifeDur -= maxDuration
-                                        if (knifeDur <= 0) {
-                                            stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
-                                            stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, null)
-                                            stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, null)
-                                        } else {
-                                            stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if (newEffect) {
-                            if (playerEffects.isEmpty()) {
-                                if (knifeEff.value().isInstantenous) {
-                                    player.addEffect(MobEffectInstance(knifeEff, 1, 0))
-                                    knifeDur--
-                                    if (knifeDur <= 0) {
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, null)
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, null)
-                                    } else {
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
-                                    }
-                                } else {
-                                    val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
-                                    if (knifeDur < maxDuration) {
-                                        player.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, null)
-                                        stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, null)
-                                    } else {
-                                        player.addEffect(MobEffectInstance(knifeEff, maxDuration, knifeAmp))
-                                        knifeDur -= maxDuration
-                                        if (knifeDur <= 0) {
-                                            stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
-                                            stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, null)
-                                            stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, null)
-                                        } else {
-                                            stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    applyEffects(stack, player, knifeEff, knifeDur, knifeAmp)
                 } else {
                     //todo knife ready sound
                     stack.set(DeteratoxinDataComponents.KNIFE_DATA, KnifeData(true, 100))
@@ -329,7 +214,6 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
         return super.use(level, player, interactionHand)
     }
 
-    // Ticks down the 'ready time', the knife is in the ready state, and not used, it will unready and be put on cooldown
     override fun inventoryTick(stack: ItemStack, level: Level, entity: Entity, i: Int, bl: Boolean) {
         super.inventoryTick(stack, level, entity, i, bl)
         val data = stack.getOrDefault(
@@ -347,9 +231,6 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
             }
         }
     }
-
-
-    // effects stuff
 
     override fun overrideOtherStackedOnMe(
         itemStack: ItemStack,
@@ -389,9 +270,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                         effectApplied = true
                         break
                     }
-                    itemStack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, effect)
-                    itemStack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, amplifier)
-                    itemStack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, duration)
+                    applyEffectToKnife(itemStack, effect, amplifier, duration)
                     effectApplied = true
                     break
                 } else if (knifeEff == effect) {
@@ -442,9 +321,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                                 knifeDur = 9600
                             }
                         }
-                        itemStack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, knifeEff)
-                        itemStack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, knifeAmp)
-                        itemStack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
+                        applyEffectToKnife(itemStack, knifeEff, knifeAmp, knifeDur)
                         effectApplied = true
                         break
                     }
@@ -484,9 +361,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                     )
                     effectApplied = true
                 }
-                itemStack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, effect)
-                itemStack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, amplifier)
-                itemStack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, duration)
+                applyEffectToKnife(itemStack, effect, amplifier, duration)
                 effectApplied = true
             } else if (knifeEff == effect) {
                 if (effect.value().isInstantenous) {
@@ -535,13 +410,11 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                             knifeDur = 9600
                         }
                     }
-                    itemStack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, knifeEff)
-                    itemStack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, knifeAmp)
-                    itemStack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
+                    applyEffectToKnife(itemStack, knifeEff, knifeAmp, knifeDur)
                     effectApplied = true
                 }
             }
-            if (effectApplied){
+            if (effectApplied) {
                 itemStack2.count--
                 player.level()
                     .playLocalSound(player, SoundEvents.BREWING_STAND_BREW, SoundSource.PLAYERS, 1.0f, 1.25f)
@@ -601,6 +474,18 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
         }
 
         super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag)
+    }
+
+    fun nullAll(stack: ItemStack) {
+        stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
+        stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, null)
+        stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, null)
+    }
+
+    fun applyEffectToKnife(stack: ItemStack, effect: Holder<MobEffect>, amp: Int, dur: Int) {
+        stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, effect)
+        stack.set(DeteratoxinDataComponents.KNIFE_POTION_AMPLIFIER, amp)
+        stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, dur)
     }
 
     companion object {

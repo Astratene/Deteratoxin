@@ -15,12 +15,15 @@ class DeteratoxinDamageTypeTagProvider(o: FabricDataOutput, r: CompletableFuture
     override fun addTags(wrapperLookup: HolderLookup.Provider) {
         tag(DamageTypeTags.BYPASSES_COOLDOWN)
             .add(DeteratoxinDamageTypes.DETERIORATED)
+            .add(DeteratoxinDamageTypes.STABBED)
 
         tag(DamageTypeTags.NO_KNOCKBACK)
             .add(DeteratoxinDamageTypes.DETERIORATED)
+            .add(DeteratoxinDamageTypes.STABBED)
 
         tag(DamageTypeTags.BYPASSES_SHIELD)
             .add(DeteratoxinDamageTypes.DETERIORATED)
+            .add(DeteratoxinDamageTypes.STABBED)
 
         tag(DamageTypeTags.BYPASSES_ARMOR)
             .add(DeteratoxinDamageTypes.DETERIORATED)
