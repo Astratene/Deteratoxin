@@ -35,8 +35,8 @@ public class GuiMixin {
         extractPotentHearts(player, potentHearts);
         extractImmunityHearts(player, immunityHearts);
 
-        gui.drawCenteredString(Minecraft.getInstance().font, "detox: " + detoxHearts.get(), xLeft, yLineBase - 20, -1);
-        gui.drawCenteredString(Minecraft.getInstance().font, "potent: " + potentHearts.get(), xLeft, yLineBase - 30, -1);
+        gui.drawCenteredString(Minecraft.getInstance().font, "potent: " + potentHearts.get(), xLeft, yLineBase - 20, -1);
+        gui.drawCenteredString(Minecraft.getInstance().font, "detox: " + detoxHearts.get(), xLeft, yLineBase - 30, -1);
         gui.drawCenteredString(Minecraft.getInstance().font, "imm: " + immunityHearts.get(), xLeft, yLineBase - 40, -1);
     }
 
