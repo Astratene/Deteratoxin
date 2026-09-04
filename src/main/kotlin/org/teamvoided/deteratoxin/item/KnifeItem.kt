@@ -20,9 +20,6 @@ import net.minecraft.world.inventory.ClickAction
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import net.minecraft.world.item.LingeringPotionItem
-import net.minecraft.world.item.PotionItem
-import net.minecraft.world.item.SplashPotionItem
 import net.minecraft.world.item.Tier
 import net.minecraft.world.item.TieredItem
 import net.minecraft.world.item.Tiers
@@ -83,7 +80,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                                 stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
                             }
                         } else {
-                            val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.WEAK_DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
+                            val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
                             if (knifeDur < maxDuration) {
                                 target.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
                                 stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
@@ -117,7 +114,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                                         stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
                                     }
                                 } else {
-                                    val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.WEAK_DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
+                                    val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
                                     if (knifeDur < maxDuration && (knifeDur > eff.duration || knifeAmp > eff.amplifier)) {
                                         target.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
                                         stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
@@ -150,7 +147,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                                         stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
                                     }
                                 } else {
-                                    val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.WEAK_DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
+                                    val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
                                     if (knifeDur < maxDuration) {
                                         target.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
                                         stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
@@ -224,7 +221,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                                 stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
                             }
                         } else {
-                            val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.WEAK_DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
+                            val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
                             if (knifeDur < maxDuration) {
                                 player.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
                                 stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
@@ -258,7 +255,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                                         stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
                                     }
                                 } else {
-                                    val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.WEAK_DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
+                                    val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
                                     if (knifeDur < maxDuration && (knifeDur > eff.duration || knifeAmp > eff.amplifier)) {
                                         player.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
                                         stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
@@ -291,7 +288,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                                         stack.set(DeteratoxinDataComponents.KNIFE_POTION_DURATION, knifeDur)
                                     }
                                 } else {
-                                    val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.WEAK_DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
+                                    val maxDuration = if(knifeEff.`is`(DeteratoxinEffects.DETERATOXIN)) 600 else max(100, 600 / (knifeAmp + 1))
                                     if (knifeDur < maxDuration) {
                                         player.addEffect(MobEffectInstance(knifeEff, knifeDur, knifeAmp))
                                         stack.set(DeteratoxinDataComponents.KNIFE_POTION_EFFECT, null)
@@ -344,7 +341,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                 stack.set(DeteratoxinDataComponents.KNIFE_DATA, KnifeData(data.readied, data.readyTime - 1))
             } else {
                 stack.set(DeteratoxinDataComponents.KNIFE_DATA, KnifeData(false, 0))
-                if (entity is Player) {
+                if (entity is Player && !entity.cooldowns.isOnCooldown(stack.item)) {
                     entity.cooldowns.addCooldown(stack.item, 160)
                 }
             }

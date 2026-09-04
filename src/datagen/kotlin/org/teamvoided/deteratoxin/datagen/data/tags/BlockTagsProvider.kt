@@ -16,8 +16,9 @@ class BlockTagsProvider(o: FabricDataOutput, p: CompletableFuture<HolderLookup.P
 //        getOrCreateTagBuilder(BlockTags.LOGS)
 //            .add(DeteratoxinBlocks.SPECIAL_APPLE_BLOCK)
 //
-//        getOrCreateTagBuilder(DeteratoxinBlockTags.APPLE_LIKE)
-//            .add(DeteratoxinBlocks.APPLE_BLOCK, Blocks.RED_TERRACOTTA)
+        getOrCreateTagBuilder(DeteratoxinBlockTags.LILY_PLACABLE)
+            .forceAddTag(BlockTags.SCULK_REPLACEABLE_WORLD_GEN)
+            .forceAddTag(BlockTags.LOGS)
 //
 //        getOrCreateTagBuilder(ConventionalBlockTags.STORAGE_BLOCKS)
 //            .forceAddTag(DeteratoxinBlockTags.APPLE_LIKE)

@@ -1,27 +1,20 @@
 package org.teamvoided.deteratoxin.entity
 
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.syncher.SynchedEntityData
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.sounds.SoundSource
+import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.MoverType
-import net.minecraft.network.syncher.SynchedEntityData
-import net.minecraft.world.effect.MobEffectInstance
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.server.level.ServerLevel
-import net.minecraft.sounds.SoundEvents
-import net.minecraft.sounds.SoundSource
-import net.minecraft.world.InteractionHand
-import net.minecraft.world.InteractionResult
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.BottleItem
-import net.minecraft.world.item.Items
-import net.minecraft.world.phys.AABB
 import net.minecraft.world.level.Level
+import net.minecraft.world.phys.AABB
 import org.teamvoided.deteratoxin.init.DeteratoxinEffects
 import org.teamvoided.deteratoxin.init.DeteratoxinEntities.DETERATOXIN_CLOUD
-import org.teamvoided.deteratoxin.init.DeteratoxinItems
 import org.teamvoided.deteratoxin.init.DeteratoxinParticles
-import org.teamvoided.deteratoxin.util.giveItem
 import kotlin.math.min
 
 class DeteratoxinCloudEntity : Entity {
@@ -107,11 +100,11 @@ class DeteratoxinCloudEntity : Entity {
             )
             for (entity in entities) {
                 if (entity is LivingEntity && this.tickCount % 30 == 0) {
-                    val shred = entity.getEffect(DeteratoxinEffects.WEAK_DETERATOXIN)
+                    val shred = entity.getEffect(DeteratoxinEffects.DETERATOXIN)
                     val lvl = shred?.amplifier ?: -1
                     entity.addEffect(
                         MobEffectInstance(
-                            DeteratoxinEffects.WEAK_DETERATOXIN,
+                            DeteratoxinEffects.DETERATOXIN,
                             100, min(lvl + 1, 9),
                             false, true, true
                         )

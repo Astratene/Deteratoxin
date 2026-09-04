@@ -6,7 +6,7 @@ import org.teamvoided.deteratoxin.util.tag
 
 object DeteratoxinBlockTags {
 
-    val APPLE_LIKE = create("apple_like")
+    val LILY_PLACABLE = create("lily_placable")
 
     fun create(id: String) = Registries.BLOCK.tag(id(id))
 

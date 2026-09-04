@@ -1,7 +1,7 @@
 mod_name = "Deteratoxin"
 mod_id = "deteratoxin"
 mod_group = "org.teamvoided"
-mod_version = "1.0.0.alpha3"
+mod_version = "1.0.0.alpha4"
 mod_description = "Yummy posion"
 github_repo = "Astratene/Deteratoxin"
 discord_invite = "https://discord.gg/KZ5Q364hEg"

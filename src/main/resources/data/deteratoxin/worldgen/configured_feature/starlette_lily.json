@@ -1,0 +1,8 @@
+{
+  "type": "deteratoxin:cave_surface_patch",
+  "config": {
+    "state": {
+      "Name": "deteratoxin:starlette_lily"
+    }
+  }
+}

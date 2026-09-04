@@ -11,7 +11,7 @@ open class DeteratoxinBasicEffect : MobEffect {
     companion object {
 
         @JvmField
-        val DETOX_ATTRIBUTE = id("effect.weak_deteratoxin")
+        val DETOX_ATTRIBUTE = id("effect.deteratoxin")
 
     }
 }

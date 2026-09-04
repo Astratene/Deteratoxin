@@ -12,6 +12,7 @@ object DeteratoxinDamageTypes {
     val DETOX = create("detox")
     val DRINKNT = create("drinknt")
     val DRINKETH = create("drinketh")
+    val DETERIORATED = create("deteriorated")
 
     fun create(id: String) = Registries.DAMAGE_TYPE.key(Deteratoxin.id(id))
 

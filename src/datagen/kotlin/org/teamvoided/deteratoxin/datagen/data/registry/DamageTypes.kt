@@ -14,6 +14,7 @@ object DamageTypes : RegistryBootstrapper<DamageType> {
         damage(DeteratoxinDamageTypes.DETOX, 0f)
         damage(DeteratoxinDamageTypes.DRINKNT, 0f)
         damage(DeteratoxinDamageTypes.DRINKETH, 0f)
+        damage(DeteratoxinDamageTypes.DETERIORATED, 0f)
     }
 
     fun BootstrapContext<DamageType>.damage(

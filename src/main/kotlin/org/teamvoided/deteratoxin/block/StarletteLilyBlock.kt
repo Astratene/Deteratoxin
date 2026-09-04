@@ -64,12 +64,12 @@ class StarletteLilyBlock(settings: BlockBehaviour.Properties) : RodBlock(setting
             super.updateShape(state, direction, neighborState, world, pos, neighborPos)
     }
 
-    val Y_SHAPE: VoxelShape? = box(2.0, 0.0, 2.0, 14.0, 3.0, 14.0)
-    val Z_SHAPE: VoxelShape? = box(2.0, 2.0, 0.0, 14.0, 14.0, 3.0)
-    val X_SHAPE: VoxelShape? = box(0.0, 2.0, 2.0, 3.0, 14.0, 14.0)
-    val Y_SHAPE2: VoxelShape? = box(2.0, 13.0, 2.0, 14.0, 16.0, 14.0)
-    val Z_SHAPE2: VoxelShape? = box(2.0, 2.0, 13.0, 14.0, 14.0, 16.0)
-    val X_SHAPE2: VoxelShape? = box(13.0, 2.0, 2.0, 16.0, 14.0, 14.0)
+    val Y_SHAPE: VoxelShape? = box(1.0, 0.0, 1.0, 15.0, 5.0, 15.0)
+    val Z_SHAPE: VoxelShape? = box(1.0, 1.0, 0.0, 15.0, 15.0, 5.0)
+    val X_SHAPE: VoxelShape? = box(0.0, 1.0, 1.0, 5.0, 15.0, 15.0)
+    val Y_SHAPE2: VoxelShape? = box(1.0, 11.0, 1.0, 15.0, 16.0, 15.0)
+    val Z_SHAPE2: VoxelShape? = box(1.0, 1.0, 11.0, 15.0, 15.0, 16.0)
+    val X_SHAPE2: VoxelShape? = box(11.0, 1.0, 1.0, 16.0, 15.0, 15.0)
 
     override fun getShape(
         state: BlockState?,

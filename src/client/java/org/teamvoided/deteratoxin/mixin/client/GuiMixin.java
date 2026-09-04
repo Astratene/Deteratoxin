@@ -35,7 +35,7 @@ public class GuiMixin {
 
         hearts.set(-1);
 
-        var deteratoxin = player.getEffect(DeteratoxinEffects.WEAK_DETERATOXIN);
+        var deteratoxin = player.getEffect(DeteratoxinEffects.DETERATOXIN);
         if (deteratoxin == null) {
             return;
         }

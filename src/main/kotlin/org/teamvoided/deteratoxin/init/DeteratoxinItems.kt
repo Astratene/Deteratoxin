@@ -2,7 +2,6 @@ package org.teamvoided.deteratoxin.init
 
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.effect.MobEffectInstance
-import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.food.FoodProperties
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Item.Properties
@@ -29,7 +28,7 @@ object DeteratoxinItems {
     val DETOX_EXTRACT: FoodProperties = FoodProperties.Builder()
         .nutrition(0)
         .saturationModifier(0f)
-        .effect(MobEffectInstance(DeteratoxinEffects.WEAK_DETERATOXIN, 200, 5), 1.0f)
+        .effect(MobEffectInstance(DeteratoxinEffects.DETERATOXIN, 200, 5), 1.0f)
         .alwaysEdible()
         .build()
 
