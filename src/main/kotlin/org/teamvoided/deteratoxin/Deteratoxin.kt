@@ -38,6 +38,7 @@ object Deteratoxin {
         DeteratoxinEntities.init()
         DeteratoxinWorldGen.init()
         DeteratoxinDataAttachments.init()
+        DeteratoxinCommands.init()
 
         UseItemCallback.EVENT.register { player, level, hand ->
             val stack = player.getItemInHand(hand)
