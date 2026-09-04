@@ -18,6 +18,7 @@ import org.teamvoided.deteratoxin.datagen.data.registry.DamageTypes
 import org.teamvoided.deteratoxin.datagen.data.registry.KnifeIngredients
 import org.teamvoided.deteratoxin.datagen.data.registry.Paintings
 import org.teamvoided.deteratoxin.datagen.data.tags.BlockTagsProvider
+import org.teamvoided.deteratoxin.datagen.data.tags.DeteratoxinDamageTypeTagProvider
 import org.teamvoided.deteratoxin.datagen.data.tags.ItemTagsProvider
 import org.teamvoided.deteratoxin.init.DeteratoxinRegistries
 import java.util.concurrent.CompletableFuture
@@ -38,6 +39,7 @@ object DeteratoxinData : DataGeneratorEntrypoint {
         val blockTags = pack.addProvider(::BlockTagsProvider)
         pack.addProvider { o, f -> ItemTagsProvider(o, f, blockTags) }
         pack.addProvider(::RecipeProvider)
+        pack.addProvider(::DeteratoxinDamageTypeTagProvider)
 
     }
 

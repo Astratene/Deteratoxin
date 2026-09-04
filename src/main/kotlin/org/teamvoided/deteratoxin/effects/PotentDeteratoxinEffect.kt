@@ -15,13 +15,14 @@ class PotentDeteratoxinEffect(type: MobEffectCategory, color: Int) : Deteratoxin
         return true
     }
 
-    override fun applyEffectTick(entity: LivingEntity, i: Int): Boolean {
+    override fun applyEffectTick(entity: LivingEntity, amplifier: Int): Boolean {
         val existingDetox = entity.getDetox()
-        if (entity.health > ((entity.maxHealth - existingDetox) - (i + 1))) {
-            val damage = entity.health - ((entity.maxHealth - existingDetox) - (i + 1))
+        val hp = ((entity.maxHealth - existingDetox) - (amplifier + 1))
+        if (entity.health > hp) {
+            val damage = entity.health - hp
             entity.customDamage(DeteratoxinDamageTypes.DETERIORATED, damage)
         }
-        entity.setDetox(existingDetox + i)
+        entity.setDetox(existingDetox + amplifier)
         entity.setDetoxCooldown(600)
         entity.removeEffect(DeteratoxinEffects.POTENT_DETERATOXIN)
         return true
