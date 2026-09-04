@@ -1,5 +1,6 @@
 package org.teamvoided.deteratoxin.init
 
+import com.mojang.serialization.Codec
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry
 import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType
@@ -41,7 +42,11 @@ object DeteratoxinDataAttachments {
     // endregion
 
     fun register(id: String): AttachmentType<Int> {
-        return register(id) { it.syncWith(ByteBufCodecs.INT, AttachmentSyncPredicate.targetOnly()) }
+        return register(id) {
+            it
+                .persistent(Codec.INT)
+                .syncWith(ByteBufCodecs.INT, AttachmentSyncPredicate.targetOnly())
+        }
     }
 
     fun <T : Any> register(id: String, builder: Consumer<AttachmentRegistry.Builder<T>>): AttachmentType<T> {
