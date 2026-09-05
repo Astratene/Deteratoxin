@@ -88,7 +88,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
     fun applyEffects(stack: ItemStack, target: LivingEntity, knifeEff: Holder<MobEffect>, dur: Int, amp: Int) {
         var knifeDur = dur
         var knifeAmp = amp
-        stack.set(DeteratoxinDataComponents.KNIFE_DATA, KnifeData(false, 0))
+        stack.set(DeteratoxinDataComponents.KNIFE_DATA, null)
         val targetEffects = target.activeEffects.filter { it.effect == knifeEff }
         if (targetEffects.isEmpty()) {
             applyApplyEffects(stack, target, knifeEff, knifeDur, knifeAmp)
@@ -224,7 +224,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
             if (data.readyTime > 0) {
                 stack.set(DeteratoxinDataComponents.KNIFE_DATA, KnifeData(data.readied, data.readyTime - 1))
             } else {
-                stack.set(DeteratoxinDataComponents.KNIFE_DATA, KnifeData(false, 0))
+                stack.set(DeteratoxinDataComponents.KNIFE_DATA, null)
                 if (entity is Player && !entity.cooldowns.isOnCooldown(stack.item)) {
                     entity.cooldowns.addCooldown(stack.item, 160)
                 }

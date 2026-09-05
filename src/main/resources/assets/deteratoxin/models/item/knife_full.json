@@ -1,0 +1,7 @@
+{
+  "parent": "deteratoxin:item/parent/knife",
+  "textures": {
+    "layer0": "deteratoxin:item/knife",
+    "layer1": "deteratoxin:item/knife_overlay"
+  }
+}

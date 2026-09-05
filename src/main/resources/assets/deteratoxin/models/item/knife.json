@@ -1,41 +1,17 @@
 {
-	"format_version": "1.21.11",
-	"credit": "Made with Blockbench",
-	"parent": "minecraft:item/handheld",
-	"textures": {
-		"layer0": "deteratoxin:item/knife"
-	},
-	"display": {
-		"thirdperson_righthand": {
-			"rotation": [-31, -90, 0],
-			"translation": [0, 4, 1.75],
-			"scale": [0.6, 0.6, 0.6]
-		},
-		"thirdperson_lefthand": {
-			"rotation": [-31, 90, 0],
-			"translation": [0, 4, 1.75],
-			"scale": [0.6, 0.6, 0.6]
-		},
-		"firstperson_righthand": {
-			"rotation": [-31, -90, 0],
-			"translation": [-0.25, 3.5, 1.5],
-			"scale": [0.6, 0.6, 0.6]
-		},
-		"firstperson_lefthand": {
-			"rotation": [-31, 90, 0],
-			"translation": [-0.25, 3.5, 1.5],
-			"scale": [0.6, 0.6, 0.6]
-		},
-		"ground": {
-			"translation": [0, 3, 0],
-			"scale": [0.6, 0.6, 0.6]
-		},
-		"head": {
-			"rotation": [0, 0, -90.25],
-			"translation": [-8.25, 8.75, 0.25]
-		},
-		"fixed": {
-			"rotation": [0, 180, 0]
-		}
-	}
+  "parent": "deteratoxin:item/parent/knife",
+  "overrides": [
+    {
+      "predicate": {
+        "deteratoxin:knife_effect": 1
+      },
+      "model": "deteratoxin:item/knife_full"
+    },
+    {
+      "predicate": {
+        "deteratoxin:knife_state": 1
+      },
+      "model": "deteratoxin:item/knife_full_active"
+    }
+  ]
 }

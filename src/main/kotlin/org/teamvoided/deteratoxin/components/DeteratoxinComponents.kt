@@ -2,6 +2,9 @@ package org.teamvoided.deteratoxin.components
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import io.netty.buffer.ByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 
 data class KnifeData(val readied: Boolean, val readyTime: Int) : SimpleStorageComponent {
 
@@ -14,12 +17,17 @@ data class KnifeData(val readied: Boolean, val readyTime: Int) : SimpleStorageCo
 
     companion object {
         val DEFAULT: KnifeData = KnifeData(false, 0)
-        val CODEC = RecordCodecBuilder.create<KnifeData> { builder ->
+        val CODEC: Codec<KnifeData> = RecordCodecBuilder.create<KnifeData> { builder ->
             builder.group(
                 Codec.BOOL.fieldOf("readied").forGetter { it.readied },
                 Codec.INT.fieldOf("ready_time").forGetter { it.readyTime }
             ).apply(builder, ::KnifeData)
         }
+        val STREAM_CODEC: StreamCodec<ByteBuf, KnifeData> = StreamCodec.composite(
+            ByteBufCodecs.BOOL, { it.readied },
+            ByteBufCodecs.INT, { it.readyTime },
+            ::KnifeData
+        )
     }
 }
 
