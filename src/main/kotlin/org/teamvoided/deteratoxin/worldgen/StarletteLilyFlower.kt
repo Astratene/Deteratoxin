@@ -2,7 +2,6 @@ package org.teamvoided.deteratoxin.worldgen
 
 import com.mojang.serialization.Codec
 import net.minecraft.core.Direction
-import net.minecraft.tags.BlockTags
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.levelgen.feature.Feature
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext
@@ -18,7 +17,7 @@ class StarletteLilyFlower(codec: Codec<BlockStateConfiguration>) : Feature<Block
         var success = false
         val xz = 10
         val y = 10
-        for (t in 0..50) {
+        repeat(50) {
             val pos = blockPos.offset(
                 rand.nextInt(xz) * 2 - xz,
                 rand.nextInt(y) * 2 - y,
