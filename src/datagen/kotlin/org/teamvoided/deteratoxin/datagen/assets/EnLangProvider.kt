@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
+import org.teamvoided.deteratoxin.client.DeteratoxinClient
 import org.teamvoided.deteratoxin.util.getModHolders
 import java.util.concurrent.CompletableFuture
 
@@ -39,6 +40,9 @@ class EnLangProvider(var output: FabricDataOutput, p: CompletableFuture<HolderLo
             "tooltip.deteratoxin.currentInstantEffect.tooltip",
             "Current Effect: %s. uses: %s"
         )
+
+        gen.add(DeteratoxinClient.INGREDIENT_TOOLTIP, "Can apply to the knife!")
+
         gen.add("death.attack.stabbed", "%s drove their knife too deep")
         gen.add("death.attack.stabbed.player", "%s drove their knife too deep while fighting %s")
 
