@@ -28,7 +28,7 @@ object Deteratoxin {
     var config = ConfigApi.registerAndLoadConfig(::DeteratoxinConfig)
 
     fun init() {
-        log.info("Hello from Common ${config.commonEntry.get()}")
+        log.info("More like deteratox-YUM!")
         DeteratoxinItems.init()
         DeteratoxinBlocks.init()
         DeteratoxinDataComponents.init()

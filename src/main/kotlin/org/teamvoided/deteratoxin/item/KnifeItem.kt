@@ -51,6 +51,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
     fun applyApplyEffects(
         stack: ItemStack,
         target: LivingEntity,
+        user: LivingEntity,
         knifeEff: Holder<MobEffect>,
         dur: Int,
         amp: Int
@@ -58,7 +59,10 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
         var knifeDur = dur
         var knifeAmp = amp
         if (knifeEff.value().isInstantenous) {
-            target.addEffect(MobEffectInstance(knifeEff, 1, 0))
+            target.addEffect(MobEffectInstance(knifeEff, 1, if (knifeEff.value() == DeteratoxinEffects.POTENT_DETERATOXIN.value()) 3 else 0))
+            if (knifeEff.value() == DeteratoxinEffects.POTENT_DETERATOXIN.value()) {
+                user.addEffect(MobEffectInstance(knifeEff, 1, 4))
+            }
             knifeDur--
             if (knifeDur <= 0) {
                 nullAll(stack)
@@ -85,20 +89,23 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
         }
     }
 
-    fun applyEffects(stack: ItemStack, target: LivingEntity, knifeEff: Holder<MobEffect>, dur: Int, amp: Int) {
+    fun applyEffects(stack: ItemStack, target: LivingEntity, user: LivingEntity, knifeEff: Holder<MobEffect>, dur: Int, amp: Int) {
         var knifeDur = dur
         var knifeAmp = amp
         stack.set(DeteratoxinDataComponents.KNIFE_DATA, null)
         val targetEffects = target.activeEffects.filter { it.effect == knifeEff }
         if (targetEffects.isEmpty()) {
-            applyApplyEffects(stack, target, knifeEff, knifeDur, knifeAmp)
+            applyApplyEffects(stack, target, user, knifeEff, knifeDur, knifeAmp)
         } else {
             var newEffect = true
             for (eff in targetEffects) {
                 if (eff.effect.value() == knifeEff.value()) {
                     newEffect = false
                     if (knifeEff.value().isInstantenous) {
-                        target.addEffect(MobEffectInstance(knifeEff, 1, 0))
+                        target.addEffect(MobEffectInstance(knifeEff, 1, if (knifeEff.value() == DeteratoxinEffects.POTENT_DETERATOXIN.value()) 3 else 0))
+                        if (knifeEff.value() == DeteratoxinEffects.POTENT_DETERATOXIN.value()) {
+                            user.addEffect(MobEffectInstance(knifeEff, 1, 4))
+                        }
                         knifeDur--
                         if (knifeDur <= 0) {
                             nullAll(stack)
@@ -128,7 +135,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
             }
             if (newEffect) {
                 if (targetEffects.isEmpty()) {
-                    applyApplyEffects(stack, target, knifeEff, knifeDur, knifeAmp)
+                    applyApplyEffects(stack, target, user, knifeEff, knifeDur, knifeAmp)
                 }
             }
         }
@@ -156,7 +163,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                         2.0F,
                         2.0f
                     )
-                    applyEffects(stack, target, knifeEff, knifeDur, knifeAmp)
+                    applyEffects(stack, target, user, knifeEff, knifeDur, knifeAmp)
                 }
             }
         }
@@ -193,7 +200,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                         2.0f
                     )
                     player.cooldowns.addCooldown(stack.item, 450)
-                    applyEffects(stack, player, knifeEff, knifeDur, knifeAmp)
+                    applyEffects(stack, player, player, knifeEff, knifeDur, knifeAmp)
                 } else {
                     //todo knife ready sound
                     stack.set(DeteratoxinDataComponents.KNIFE_DATA, KnifeData(true, 100))

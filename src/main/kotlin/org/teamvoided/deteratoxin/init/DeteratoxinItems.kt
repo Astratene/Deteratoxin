@@ -1,10 +1,15 @@
 package org.teamvoided.deteratoxin.init
 
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents.ModifyEntries
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.food.FoodProperties
+import net.minecraft.world.item.CreativeModeTabs
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Item.Properties
+import net.minecraft.world.item.Items
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.item.Tiers
 import org.teamvoided.deteratoxin.Deteratoxin.id
@@ -12,6 +17,7 @@ import org.teamvoided.deteratoxin.item.DrinkableItem
 import org.teamvoided.deteratoxin.item.KnifeItem
 import org.teamvoided.deteratoxin.util.getModEntries
 import org.teamvoided.deteratoxin.util.register
+
 
 object DeteratoxinItems {
 
@@ -39,14 +45,31 @@ object DeteratoxinItems {
         )
     )
 
+    val POTENT_DETOX_EXTRACT: FoodProperties = FoodProperties.Builder()
+        .nutrition(0)
+        .saturationModifier(0f)
+        .effect(MobEffectInstance(DeteratoxinEffects.POTENT_DETERATOXIN, 200, 6), 1.0f)
+        .alwaysEdible()
+        .build()
+
     val POTENT_DETERATOXIN_EXTRACT = register(
         "potent_deteratoxin_extract",
         DrinkableItem(
-            Properties().rarity(Rarity.RARE).food(DETOX_EXTRACT),
+            Properties().rarity(Rarity.RARE).food(POTENT_DETOX_EXTRACT),
         )
     )
 
-    fun init() = Unit
+    fun init(): Unit {
+        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.INGREDIENTS).register { itemGroup ->
+            itemGroup.addAfter(Items.DRAGON_BREATH, DETERATOXIN_EXTRACT, POTENT_DETERATOXIN_EXTRACT)
+        }
+        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.COMBAT).register { itemGroup ->
+            itemGroup.addAfter(Items.MACE, KNIFE)
+        }
+        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register { itemGroup ->
+            itemGroup.addAfter(Items.SPORE_BLOSSOM, DeteratoxinBlocks.STARLETTE_LILY)
+        }
+    }
 
     fun register(id: String, item: Item): Item = BuiltInRegistries.ITEM.register(id(id), item)
 

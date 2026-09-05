@@ -53,6 +53,7 @@ object KnifeIngredients : RegistryBootstrapper<KnifeIngredient> {
         knifeIngredient(Items.CHICKEN, MobEffects.HUNGER, 200, 0)
 
         knifeIngredient(DeteratoxinItems.DETERATOXIN_EXTRACT, DeteratoxinEffects.DETERATOXIN, 500, 3)
+        knifeIngredient(DeteratoxinItems.POTENT_DETERATOXIN_EXTRACT, DeteratoxinEffects.POTENT_DETERATOXIN, 1, 0)
     }
 
     fun BootstrapContext<KnifeIngredient>.knifeIngredient(

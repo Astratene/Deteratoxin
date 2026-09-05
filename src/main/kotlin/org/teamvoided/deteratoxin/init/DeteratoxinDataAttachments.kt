@@ -15,8 +15,8 @@ object DeteratoxinDataAttachments {
     fun init() = Unit
 
     @JvmField
-    val IMMUNITY = register("immunity")
-    val IMMUNITY_HEARTS = register("immunity_hearts")
+    val IMMUNITY = registerConsistent("immunity")
+    val IMMUNITY_HEARTS = registerConsistent("immunity_hearts")
     val POTENT_DETERATOXIN = register("potent_deteratoxin")
     val DETOX_COOLDOWN = register("detox_cooldown")
 
@@ -45,6 +45,15 @@ object DeteratoxinDataAttachments {
         return register(id) {
             it
                 .persistent(Codec.INT)
+                .syncWith(ByteBufCodecs.INT, AttachmentSyncPredicate.targetOnly())
+        }
+    }
+
+    fun registerConsistent(id: String): AttachmentType<Int> {
+        return register(id) {
+            it
+                .persistent(Codec.INT)
+                .copyOnDeath()
                 .syncWith(ByteBufCodecs.INT, AttachmentSyncPredicate.targetOnly())
         }
     }

@@ -11,6 +11,7 @@ import net.minecraft.core.RegistrySetBuilder
 import net.minecraft.core.registries.Registries
 import org.teamvoided.deteratoxin.Deteratoxin
 import org.teamvoided.deteratoxin.Deteratoxin.log
+import org.teamvoided.deteratoxin.datagen.assets.DeteratoxinRecipeProvider
 import org.teamvoided.deteratoxin.datagen.assets.EnLangProvider
 import org.teamvoided.deteratoxin.datagen.assets.ModelProvider
 import org.teamvoided.deteratoxin.datagen.data.RecipeProvider
@@ -38,8 +39,8 @@ object DeteratoxinData : DataGeneratorEntrypoint {
         pack.addProvider(::RegistryProvider)
         val blockTags = pack.addProvider(::BlockTagsProvider)
         pack.addProvider { o, f -> ItemTagsProvider(o, f, blockTags) }
-        pack.addProvider(::RecipeProvider)
         pack.addProvider(::DeteratoxinDamageTypeTagProvider)
+        pack.addProvider(::DeteratoxinRecipeProvider)
 
     }
 

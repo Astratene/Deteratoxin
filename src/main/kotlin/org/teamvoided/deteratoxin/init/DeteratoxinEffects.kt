@@ -23,7 +23,7 @@ object DeteratoxinEffects {
     )
 
     val POTENT_DETERATOXIN = register(
-        "potent_deteratoxin", PotentDeteratoxinEffect(MobEffectCategory.HARMFUL, 0xdb2d00)
+        "potent_deteratoxin", PotentDeteratoxinEffect(MobEffectCategory.HARMFUL, 0x377f13)
     )
 
     fun init() = Unit
