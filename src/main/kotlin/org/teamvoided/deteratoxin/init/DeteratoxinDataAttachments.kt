@@ -39,13 +39,13 @@ object DeteratoxinDataAttachments {
             0
     }
 
-    fun LivingEntity.getDetox(): Int = getAttachedOrElse(POTENT_DETERATOXIN, 0)
-    fun LivingEntity.setDetox(value: Int) = setAttached(POTENT_DETERATOXIN, value)
+    fun LivingEntity.getPotent(): Int = getAttachedOrElse(POTENT_DETERATOXIN, 0)
+    fun LivingEntity.setPotent(value: Int) = setAttached(POTENT_DETERATOXIN, value)
 
-    fun LivingEntity.getDetoxCooldown(): Int = getAttachedOrElse(DETOX_COOLDOWN, 0)
-    fun LivingEntity.setDetoxCooldown(value: Int) = setAttached(DETOX_COOLDOWN, value)
+    fun LivingEntity.getPotentCooldown(): Int = getAttachedOrElse(DETOX_COOLDOWN, 0)
+    fun LivingEntity.setPotentCooldown(value: Int) = setAttached(DETOX_COOLDOWN, value)
 
-    fun LivingEntity.clearDetox() {
+    fun LivingEntity.clearPotent() {
         removeAttached(POTENT_DETERATOXIN)
         removeAttached(DETOX_COOLDOWN)
     }

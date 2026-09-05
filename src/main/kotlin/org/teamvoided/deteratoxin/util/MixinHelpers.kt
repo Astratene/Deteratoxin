@@ -1,23 +1,23 @@
 package org.teamvoided.deteratoxin.util
 
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.LivingEntity
 import org.teamvoided.deteratoxin.data.registry.DeteratoxinDamageTypes
-import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.clearDetox
-import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getDetox
-import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getDetoxCooldown
+import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.clearImmunity
+import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.clearPotent
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getImmunity
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getImmunityHearts
-import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setDetox
-import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setDetoxCooldown
+import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getPotent
+import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getPotentCooldown
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setImmunity
+import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setPotent
+import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setPotentCooldown
 import org.teamvoided.deteratoxin.init.DeteratoxinEffects
 import kotlin.math.max
 
 fun doImmunity(entity: LivingEntity) {
     val deteratoxinEffect = entity.activeEffects.filter { it.effect.value() == DeteratoxinEffects.DETERATOXIN.value() }
-    val potentDeteratoxin = entity.getDetox()
+    val potentDeteratoxin = entity.getPotent()
     var immunity = entity.getImmunity()
     if (deteratoxinEffect.isNotEmpty() && immunity <= 13000) {
         for (effect in deteratoxinEffect) {
@@ -39,7 +39,7 @@ fun doImmunity(entity: LivingEntity) {
                     )
                 )
             }
-            entity.clearDetox()
+            entity.clearPotent()
         }
         immunity += potentDeteratoxin
     }
@@ -50,37 +50,38 @@ fun doImmunity(entity: LivingEntity) {
             immunity--
         }
     }
-    if (immunity < 0) {
-        immunity = 0
+    if (immunity <= 0) {
+        entity.clearImmunity()
+    } else {
+        entity.setImmunity(immunity)
     }
-    entity.setImmunity(immunity)
 }
 
 fun doDetoxStuff(entity: LivingEntity) {
-    if (entity.getDetox() > 0) {
-        entity.setDetoxCooldown(entity.getDetoxCooldown() - 1)
-        if (entity.getDetoxCooldown() <= 0) {
-            entity.setDetox(entity.getDetox() - 1)
-            if (entity.getDetox() <= 0) {
-                entity.clearDetox()
+    if (entity.getPotent() > 0) {
+        entity.setPotentCooldown(entity.getPotentCooldown() - 1)
+        if (entity.getPotentCooldown() <= 0) {
+            entity.setPotent(entity.getPotent() - 1)
+            if (entity.getPotent() <= 0) {
+                entity.clearPotent()
                 return
             } else {
-                entity.setDetoxCooldown(600)
+                entity.setPotentCooldown(600)
             }
         }
     }
-    if (entity.getDetox() > 0 || entity.getImmunityHearts() > 0) {
-        if (entity.health > (entity.maxHealth - entity.getDetox()) - entity.getImmunityHearts()) {
+    if (entity.getPotent() > 0 || entity.getImmunityHearts() > 0) {
+        if (entity.health > (entity.maxHealth - entity.getPotent()) - entity.getImmunityHearts()) {
             entity.customDamage(
                 DeteratoxinDamageTypes.DETERIORATED,
-                entity.health - ((entity.maxHealth - entity.getDetox()) - entity.getImmunityHearts())
+                entity.health - ((entity.maxHealth - entity.getPotent()) - entity.getImmunityHearts())
             )
         }
     }
 }
 
 fun dontHeal(entity: LivingEntity): Boolean {
-    return if ((entity.health) < (entity.maxHealth - entity.getDetox()) - entity.getImmunityHearts()) {
+    return if ((entity.health) < (entity.maxHealth - entity.getPotent()) - entity.getImmunityHearts()) {
         true
     } else {
         false

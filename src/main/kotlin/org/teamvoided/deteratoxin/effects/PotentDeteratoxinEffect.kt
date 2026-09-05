@@ -3,9 +3,9 @@ package org.teamvoided.deteratoxin.effects
 import net.minecraft.world.effect.MobEffectCategory
 import net.minecraft.world.entity.LivingEntity
 import org.teamvoided.deteratoxin.data.registry.DeteratoxinDamageTypes
-import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getDetox
-import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setDetox
-import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setDetoxCooldown
+import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getPotent
+import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setPotent
+import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setPotentCooldown
 import org.teamvoided.deteratoxin.init.DeteratoxinEffects
 import org.teamvoided.deteratoxin.util.customDamage
 
@@ -16,14 +16,14 @@ class PotentDeteratoxinEffect(type: MobEffectCategory, color: Int) : Deteratoxin
     }
 
     override fun applyEffectTick(entity: LivingEntity, amplifier: Int): Boolean {
-        val existingDetox = entity.getDetox()
+        val existingDetox = entity.getPotent()
         val hp = ((entity.maxHealth - existingDetox) - (amplifier + 1))
         if (entity.health > hp) {
             val damage = entity.health - hp
             entity.customDamage(DeteratoxinDamageTypes.DETERIORATED, damage)
         }
-        entity.setDetox(existingDetox + amplifier)
-        entity.setDetoxCooldown(600)
+        entity.setPotent(existingDetox + amplifier)
+        entity.setPotentCooldown(600)
         entity.removeEffect(DeteratoxinEffects.POTENT_DETERATOXIN)
         return true
     }

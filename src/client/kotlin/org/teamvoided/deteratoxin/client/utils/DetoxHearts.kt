@@ -10,7 +10,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
 import org.teamvoided.deteratoxin.Deteratoxin.id
 import org.teamvoided.deteratoxin.effects.DeteratoxinBasicEffect
-import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getDetox
+import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getPotent
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getImmunityHearts
 import org.teamvoided.deteratoxin.init.DeteratoxinEffects
 
@@ -66,11 +66,7 @@ object DetoxHearts {
 
     @JvmStatic
     fun extractPotentHearts(player: Player, hearts: LocalRef<Int>) {
-        hearts.set(0)
-        val potent = player.getDetox()
-        if (potent > 0) {
-            hearts.set(potent)
-        }
+        hearts.set(player.getPotent())
     }
 
     @JvmStatic
