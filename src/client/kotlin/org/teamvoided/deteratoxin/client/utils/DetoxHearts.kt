@@ -75,11 +75,7 @@ object DetoxHearts {
 
     @JvmStatic
     fun extractImmunityHearts(player: Player, hearts: LocalRef<Int>) {
-        hearts.set(0)
-        val potent = player.getImmunityHearts()
-        if (potent > 0) {
-            hearts.set(potent)
-        }
+        hearts.set(player.getImmunityHearts())
     }
 
     @JvmStatic

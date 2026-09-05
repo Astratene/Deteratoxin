@@ -14,7 +14,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.clearDetox
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.clearImmunity
-import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setImmunityHearts
+import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setImmunity
 
 object DeteratoxinCommands {
 
@@ -41,7 +41,7 @@ object DeteratoxinCommands {
                     val src = it.source
                     val player = src.player ?: return@executes -1
 
-                    player.setImmunityHearts(IntegerArgumentType.getInteger(it, "amount"))
+                    player.setImmunity(IntegerArgumentType.getInteger(it, "amount"))
 
                     0
                 }

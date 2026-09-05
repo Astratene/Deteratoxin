@@ -12,7 +12,6 @@ import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getImmunityHea
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setDetox
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setDetoxCooldown
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setImmunity
-import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setImmunityHearts
 import org.teamvoided.deteratoxin.init.DeteratoxinEffects
 import kotlin.math.max
 
@@ -32,7 +31,6 @@ fun doImmunity(entity: LivingEntity) {
                 immunity += potentDeteratoxin * 600
             }
             if (!entity.level().isClientSide) {
-                println(max(potentDeteratoxin / 2, 1))
                 entity.addEffect(
                     MobEffectInstance(
                         DeteratoxinEffects.DETERATOXIN,
@@ -56,11 +54,6 @@ fun doImmunity(entity: LivingEntity) {
         immunity = 0
     }
     entity.setImmunity(immunity)
-    if (immunity in 12000..<18000) {
-        entity.setImmunityHearts(2)
-    } else if (immunity >= 18000) {
-        entity.setImmunityHearts(4)
-    }
 }
 
 fun doDetoxStuff(entity: LivingEntity) {

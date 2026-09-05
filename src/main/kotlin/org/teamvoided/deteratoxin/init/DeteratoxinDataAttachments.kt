@@ -2,7 +2,7 @@ package org.teamvoided.deteratoxin.init
 
 import com.mojang.serialization.Codec
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry
-import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate
+import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate.targetOnly
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.world.entity.LivingEntity
@@ -15,8 +15,12 @@ object DeteratoxinDataAttachments {
     fun init() = Unit
 
     @JvmField
-    val IMMUNITY = registerConsistent("immunity")
-    val IMMUNITY_HEARTS = registerConsistent("immunity_hearts")
+    val IMMUNITY = register("immunity") {
+        it
+            .persistent(Codec.INT)
+            .copyOnDeath()
+            .syncWith(ByteBufCodecs.INT, targetOnly())
+    }
     val POTENT_DETERATOXIN = register("potent_deteratoxin")
     val DETOX_COOLDOWN = register("detox_cooldown")
 
@@ -25,9 +29,15 @@ object DeteratoxinDataAttachments {
     fun LivingEntity.setImmunity(value: Int) = setAttached(IMMUNITY, value)
     fun LivingEntity.clearImmunity() = removeAttached(IMMUNITY)
 
-    fun LivingEntity.getImmunityHearts(): Int = getAttachedOrElse(IMMUNITY_HEARTS, 0)
-    fun LivingEntity.setImmunityHearts(value: Int) = setAttached(IMMUNITY_HEARTS, value)
-    fun LivingEntity.clearImmunityHearts() = removeAttached(IMMUNITY_HEARTS)
+    fun LivingEntity.getImmunityHearts(): Int {
+        val immunity = getImmunity()
+        return if (immunity >= 18000)
+            4
+        else if (immunity >= 12000)
+            2
+        else
+            0
+    }
 
     fun LivingEntity.getDetox(): Int = getAttachedOrElse(POTENT_DETERATOXIN, 0)
     fun LivingEntity.setDetox(value: Int) = setAttached(POTENT_DETERATOXIN, value)
@@ -45,16 +55,7 @@ object DeteratoxinDataAttachments {
         return register(id) {
             it
                 .persistent(Codec.INT)
-                .syncWith(ByteBufCodecs.INT, AttachmentSyncPredicate.targetOnly())
-        }
-    }
-
-    fun registerConsistent(id: String): AttachmentType<Int> {
-        return register(id) {
-            it
-                .persistent(Codec.INT)
-                .copyOnDeath()
-                .syncWith(ByteBufCodecs.INT, AttachmentSyncPredicate.targetOnly())
+                .syncWith(ByteBufCodecs.INT, targetOnly())
         }
     }
 
