@@ -15,7 +15,7 @@ import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setPotentCoold
 import org.teamvoided.deteratoxin.init.DeteratoxinEffects
 import kotlin.math.max
 
-fun doImmunity(entity: LivingEntity) {
+fun tickImmunity(entity: LivingEntity) {
     val deteratoxinEffect = entity.activeEffects.filter { it.effect.value() == DeteratoxinEffects.DETERATOXIN.value() }
     val potentDeteratoxin = entity.getPotent()
     var immunity = entity.getImmunity()
@@ -57,7 +57,7 @@ fun doImmunity(entity: LivingEntity) {
     }
 }
 
-fun doDetoxStuff(entity: LivingEntity) {
+fun tickDeteratoxin(entity: LivingEntity) {
     if (entity.getPotent() > 0) {
         entity.setPotentCooldown(entity.getPotentCooldown() - 1)
         if (entity.getPotentCooldown() <= 0) {
@@ -71,19 +71,16 @@ fun doDetoxStuff(entity: LivingEntity) {
         }
     }
     if (entity.getPotent() > 0 || entity.getImmunityHearts() > 0) {
-        if (entity.health > (entity.maxHealth - entity.getPotent()) - entity.getImmunityHearts()) {
-            entity.customDamage(
-                DeteratoxinDamageTypes.DETERIORATED,
-                entity.health - ((entity.maxHealth - entity.getPotent()) - entity.getImmunityHearts())
-            )
+        if (entity.health > entity.getEffectiveMaxHeath()) {
+            entity.customDamage(DeteratoxinDamageTypes.DETERIORATED, entity.health - entity.getEffectiveMaxHeath())
         }
     }
 }
 
-fun dontHeal(entity: LivingEntity): Boolean {
-    return if ((entity.health) < (entity.maxHealth - entity.getPotent()) - entity.getImmunityHearts()) {
-        true
-    } else {
-        false
-    }
+fun allowHealing(entity: LivingEntity): Boolean {
+    return entity.health < entity.getEffectiveMaxHeath()
+}
+
+fun LivingEntity.getEffectiveMaxHeath(): Float {
+    return maxHealth - getPotent() - getImmunityHearts()
 }
