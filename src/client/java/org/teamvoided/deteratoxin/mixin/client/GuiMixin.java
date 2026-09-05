@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.player.Player;
@@ -34,10 +33,7 @@ public class GuiMixin {
         extractDetoxHearts(player, maxHealthMod, detoxHearts, displayHealth);
         extractPotentHearts(player, potentHearts);
         extractImmunityHearts(player, immunityHearts);
-
-        gui.drawCenteredString(Minecraft.getInstance().font, "potent: " + potentHearts.get(), xLeft, yLineBase - 20, -1);
-        gui.drawCenteredString(Minecraft.getInstance().font, "detox: " + detoxHearts.get(), xLeft, yLineBase - 30, -1);
-        gui.drawCenteredString(Minecraft.getInstance().font, "imm: " + immunityHearts.get(), xLeft, yLineBase - 40, -1);
+//        gui.drawCenteredString(Minecraft.getInstance().font, "imm: " + immunityHearts.get(), xLeft, yLineBase - 40, -1);
     }
 
     @Inject(
