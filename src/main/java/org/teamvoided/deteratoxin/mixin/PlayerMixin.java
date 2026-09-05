@@ -7,22 +7,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static org.teamvoided.deteratoxin.util.MixinHelpersKt.*;
+import static org.teamvoided.deteratoxin.util.MixinHelpersKt.allowHealing;
 
 @Mixin(Player.class)
 public abstract class PlayerMixin extends LivingEntity {
 
     protected PlayerMixin(EntityType<? extends LivingEntity> entityType, Level level) {
         super(entityType, level);
-    }
-
-    @Inject(method = "tick", at = @At("TAIL"))
-    private void run(CallbackInfo ci) {
-        tickDeteratoxin(this);
-        tickImmunity(this);
     }
 
     @ModifyExpressionValue(method = "aiStep()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/GameRules;getBoolean(Lnet/minecraft/world/level/GameRules$Key;)Z"))
