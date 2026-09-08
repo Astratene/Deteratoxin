@@ -13,11 +13,11 @@ import net.minecraft.network.chat.Component
 import net.minecraft.util.FastColor.ARGB32
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import org.teamvoided.deteratoxin.Deteratoxin
 import org.teamvoided.deteratoxin.Deteratoxin.MODID
 import org.teamvoided.deteratoxin.Deteratoxin.id
 import org.teamvoided.deteratoxin.client.init.DeteratoxinParticlesClient
 import org.teamvoided.deteratoxin.init.*
+import org.teamvoided.deteratoxin.init.DeteratoxinDataComponents.KNIFE_DATA
 import org.teamvoided.deteratoxin.init.DeteratoxinDataComponents.KNIFE_POTION_EFFECT
 import org.teamvoided.deteratoxin.item.KnifeIngredient.Companion.getKey
 import kotlin.jvm.optionals.getOrNull
@@ -25,27 +25,24 @@ import kotlin.jvm.optionals.getOrNull
 object DeteratoxinClient {
 
     fun init() {
-        Deteratoxin.log.info("Hello from Client")
-
         DeteratoxinParticlesClient.init()
 
         BlockRenderLayerMap.INSTANCE.putBlock(DeteratoxinBlocks.STARLETTE_LILY, RenderType.cutout())
         EntityRendererRegistry.register(DeteratoxinEntities.DETERATOXIN_CLOUD, ::NoopRenderer)
-        ColorProviderRegistry.ITEM.register(::getColor, DeteratoxinItems.KNIFE)
+
+        ColorProviderRegistry.ITEM.register(::getKnifeColor, DeteratoxinItems.KNIFE)
         ItemProperties.register(DeteratoxinItems.KNIFE, id("knife_effect")) { stack, _, _, _ ->
-            val effect = stack.get(KNIFE_POTION_EFFECT)
-            if (effect != null) 1f else 0f
+            if (stack.get(KNIFE_POTION_EFFECT) != null) 1f else 0f
         }
         ItemProperties.register(DeteratoxinItems.KNIFE, id("knife_state")) { stack, _, _, _ ->
-            val data = stack.get(DeteratoxinDataComponents.KNIFE_DATA)
-            if (data?.readied == true) 1f else 0f
+            if (stack.get(KNIFE_DATA)?.readied == true) 1f else 0f
         }
-        ItemTooltipCallback.EVENT.register { stack, ctx, _, tooltip -> appendTooltip(ctx, stack, tooltip) }
+        ItemTooltipCallback.EVENT.register { stack, ctx, _, tooltip -> appendKnifeTooltip(ctx, stack, tooltip) }
     }
 
     var INGREDIENT_TOOLTIP = "tooltip.$MODID.ingredient"
 
-    fun appendTooltip(ctx: Item.TooltipContext, stack: ItemStack, tooltip: MutableList<Component>) {
+    fun appendKnifeTooltip(ctx: Item.TooltipContext, stack: ItemStack, tooltip: MutableList<Component>) {
         val player = Minecraft.getInstance().player ?: return
         if (!player.inventory.contains { it.`is`(DeteratoxinItems.KNIFE) }) {
             return
@@ -62,7 +59,7 @@ object DeteratoxinClient {
 
     }
 
-    fun getColor(stack: ItemStack, layer: Int): Int {
+    fun getKnifeColor(stack: ItemStack, layer: Int): Int {
         if (layer != 1) {
             return -1
         }

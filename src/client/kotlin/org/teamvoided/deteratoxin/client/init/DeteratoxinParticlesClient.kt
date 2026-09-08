@@ -13,6 +13,8 @@ object DeteratoxinParticlesClient {
         register(DeteratoxinParticles.DETOX_POOF, DetoxPoofParticle::Factory)
     }
 
-    fun <T : ParticleOptions> register(type: ParticleType<T>, constructor: PendingParticleFactory<T>) =
-        ParticleFactoryRegistry.getInstance().register(type, constructor)
+    fun <T : ParticleOptions> register(type: ParticleType<T>, factory: PendingParticleFactory<T>) {
+        ParticleFactoryRegistry.getInstance().register(type, factory)
+    }
+
 }
