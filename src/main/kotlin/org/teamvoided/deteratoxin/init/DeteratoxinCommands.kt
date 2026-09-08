@@ -15,17 +15,19 @@ import net.minecraft.world.entity.LivingEntity
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.clearPotent
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.clearImmunity
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setImmunity
+import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setPotent
 
+//TODO make command translatable
 object DeteratoxinCommands {
 
     fun init() {
         CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
-            val deteratoxin = literal("deteratoxin").requires { it.hasPermission(4) }.build()
+            val detox = literal("detox").requires { it.hasPermission(4) }.build()
 
-            dispatcher.root.addChild(deteratoxin)
+            dispatcher.root.addChild(detox)
 
             val clear = literal("clear").executes { clearPlayers(it, null) }.build()
-            deteratoxin.addChild(clear)
+            detox.addChild(clear)
 
             val clearEntities = argument("target", EntityArgument.entities())
                 .executes { clearPlayers(it, EntityArgument.getEntities(it, "target")) }
@@ -34,19 +36,31 @@ object DeteratoxinCommands {
 
 
             val immunity = literal("immunity").build()
-            deteratoxin.addChild(immunity)
+            detox.addChild(immunity)
 
             val immunityAmount = argument("amount", IntegerArgumentType.integer())
                 .executes {
                     val src = it.source
                     val player = src.player ?: return@executes -1
-
                     player.setImmunity(IntegerArgumentType.getInteger(it, "amount"))
-
                     0
                 }
                 .build()
             immunity.addChild(immunityAmount)
+
+
+            val potent = literal("potent").build()
+            detox.addChild(potent)
+
+            val potentAmount = argument("amount", IntegerArgumentType.integer())
+                .executes {
+                    val src = it.source
+                    val player = src.player ?: return@executes -1
+                    player.setPotent(IntegerArgumentType.getInteger(it, "amount"))
+                    0
+                }
+                .build()
+            potent.addChild(potentAmount)
         }
     }
 
@@ -64,12 +78,10 @@ object DeteratoxinCommands {
             targets = listOf(player)
         }
 
-
         if (targets.isEmpty()) {
             src.sendFailure(text("Command must have at least one target!"))
             return -1
         }
-
 
         for (entity in targets.filterIsInstance<LivingEntity>()) {
             entity.clearPotent()
