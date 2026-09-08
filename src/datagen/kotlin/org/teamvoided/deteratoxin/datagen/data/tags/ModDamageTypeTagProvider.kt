@@ -9,29 +9,30 @@ import net.minecraft.world.damagesource.DamageType
 import org.teamvoided.deteratoxin.data.registry.DeteratoxinDamageTypes
 import java.util.concurrent.CompletableFuture
 
-class DeteratoxinDamageTypeTagProvider(o: FabricDataOutput, r: CompletableFuture<HolderLookup.Provider>) :
-    FabricTagProvider<DamageType>(o, Registries.DAMAGE_TYPE, r) {
+class ModDamageTypeTagProvider(o: FabricDataOutput, p: CompletableFuture<HolderLookup.Provider>) :
+    FabricTagProvider<DamageType>(o, Registries.DAMAGE_TYPE, p) {
 
     override fun addTags(wrapperLookup: HolderLookup.Provider) {
-        tag(DamageTypeTags.BYPASSES_COOLDOWN)
+        getOrCreateTagBuilder(DamageTypeTags.BYPASSES_COOLDOWN)
             .add(DeteratoxinDamageTypes.DETERIORATED)
             .add(DeteratoxinDamageTypes.STABBED)
 
-        tag(DamageTypeTags.NO_KNOCKBACK)
+        getOrCreateTagBuilder(DamageTypeTags.NO_KNOCKBACK)
             .add(DeteratoxinDamageTypes.DETERIORATED)
             .add(DeteratoxinDamageTypes.STABBED)
 
-        tag(DamageTypeTags.BYPASSES_SHIELD)
+        getOrCreateTagBuilder(DamageTypeTags.BYPASSES_SHIELD)
             .add(DeteratoxinDamageTypes.DETERIORATED)
             .add(DeteratoxinDamageTypes.STABBED)
 
-        tag(DamageTypeTags.BYPASSES_ARMOR)
+        getOrCreateTagBuilder(DamageTypeTags.BYPASSES_ARMOR)
             .add(DeteratoxinDamageTypes.DETERIORATED)
 
-        tag(DamageTypeTags.BYPASSES_ENCHANTMENTS)
+        getOrCreateTagBuilder(DamageTypeTags.BYPASSES_ENCHANTMENTS)
             .add(DeteratoxinDamageTypes.DETERIORATED)
 
-        tag(DamageTypeTags.BYPASSES_EFFECTS)
+        getOrCreateTagBuilder(DamageTypeTags.BYPASSES_EFFECTS)
             .add(DeteratoxinDamageTypes.DETERIORATED)
     }
+
 }

@@ -9,7 +9,7 @@ import org.teamvoided.deteratoxin.client.DeteratoxinClient
 import org.teamvoided.deteratoxin.util.getModHolders
 import java.util.concurrent.CompletableFuture
 
-class EnLangProvider(var output: FabricDataOutput, p: CompletableFuture<HolderLookup.Provider>) :
+class ModEnLangProvider(var output: FabricDataOutput, p: CompletableFuture<HolderLookup.Provider>) :
     FabricLanguageProvider(output, p) {
 
     override fun generateTranslations(lookup: HolderLookup.Provider, gen: TranslationBuilder) {
@@ -60,9 +60,9 @@ class EnLangProvider(var output: FabricDataOutput, p: CompletableFuture<HolderLo
         gen.add("effect.deteratoxin.potent_deteratoxin", "Potent Deteratoxin")
     }
 
-    private fun genLang(id: ResourceLocation): String =
-        id.path.split("_").joinToString(" ") { it.replaceFirstChar(Char::uppercaseChar) }
-
+    fun genLang(id: ResourceLocation): String {
+        return id.path.split("_").joinToString(" ") { it.replaceFirstChar(Char::uppercaseChar) }
+    }
 
     fun trySafe(fn: () -> Unit) {
         try {

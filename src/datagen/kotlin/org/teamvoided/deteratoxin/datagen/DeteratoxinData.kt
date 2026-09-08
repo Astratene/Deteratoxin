@@ -11,16 +11,14 @@ import net.minecraft.core.RegistrySetBuilder
 import net.minecraft.core.registries.Registries
 import org.teamvoided.deteratoxin.Deteratoxin
 import org.teamvoided.deteratoxin.Deteratoxin.log
-import org.teamvoided.deteratoxin.datagen.assets.DeteratoxinRecipeProvider
-import org.teamvoided.deteratoxin.datagen.assets.EnLangProvider
-import org.teamvoided.deteratoxin.datagen.assets.ModelProvider
-import org.teamvoided.deteratoxin.datagen.data.RecipeProvider
-import org.teamvoided.deteratoxin.datagen.data.registry.DamageTypes
-import org.teamvoided.deteratoxin.datagen.data.registry.KnifeIngredients
-import org.teamvoided.deteratoxin.datagen.data.registry.Paintings
-import org.teamvoided.deteratoxin.datagen.data.tags.BlockTagsProvider
-import org.teamvoided.deteratoxin.datagen.data.tags.DeteratoxinDamageTypeTagProvider
-import org.teamvoided.deteratoxin.datagen.data.tags.ItemTagsProvider
+import org.teamvoided.deteratoxin.datagen.data.ModRecipeProvider
+import org.teamvoided.deteratoxin.datagen.assets.ModEnLangProvider
+import org.teamvoided.deteratoxin.datagen.assets.ModModelProvider
+import org.teamvoided.deteratoxin.datagen.data.registry.ModDamageTypes
+import org.teamvoided.deteratoxin.datagen.data.registry.ModKnifeIngredients
+import org.teamvoided.deteratoxin.datagen.data.tags.ModBlockTagsProvider
+import org.teamvoided.deteratoxin.datagen.data.tags.ModDamageTypeTagProvider
+import org.teamvoided.deteratoxin.datagen.data.tags.ModItemTagsProvider
 import org.teamvoided.deteratoxin.init.DeteratoxinRegistries
 import java.util.concurrent.CompletableFuture
 
@@ -33,21 +31,19 @@ object DeteratoxinData : DataGeneratorEntrypoint {
         log.info("Running \"${gen.modContainer.metadata.name}\" Datagen!")
 
         // Assets
-        pack.addProvider(::EnLangProvider)
-        pack.addProvider(::ModelProvider)
+        pack.addProvider(::ModEnLangProvider)
+        pack.addProvider(::ModModelProvider)
         // Data
         pack.addProvider(::RegistryProvider)
-        val blockTags = pack.addProvider(::BlockTagsProvider)
-        pack.addProvider { o, f -> ItemTagsProvider(o, f, blockTags) }
-        pack.addProvider(::DeteratoxinDamageTypeTagProvider)
-        pack.addProvider(::DeteratoxinRecipeProvider)
-
+        val blockTags = pack.addProvider(::ModBlockTagsProvider)
+        pack.addProvider { o, p -> ModItemTagsProvider(o, p, blockTags) }
+        pack.addProvider(::ModDamageTypeTagProvider)
+        pack.addProvider(::ModRecipeProvider)
     }
 
     override fun buildRegistry(gen: RegistrySetBuilder) {
-        gen.add(Registries.PAINTING_VARIANT, Paintings::bootstrap)
-        gen.add(Registries.DAMAGE_TYPE, DamageTypes::bootstrap)
-        gen.add(DeteratoxinRegistries.KNIFE_INGREDIENT, KnifeIngredients::bootstrap)
+        gen.add(Registries.DAMAGE_TYPE, ModDamageTypes::bootstrap)
+        gen.add(DeteratoxinRegistries.KNIFE_INGREDIENT, ModKnifeIngredients::bootstrap)
     }
 
     class RegistryProvider(o: FabricDataOutput, p: CompletableFuture<HolderLookup.Provider>) :
@@ -56,14 +52,14 @@ object DeteratoxinData : DataGeneratorEntrypoint {
         override fun getName(): String = "Registry Gen"
 
         override fun configure(provider: HolderLookup.Provider, entries: Entries) {
-            entries.addAll(provider.lookupOrThrow(Registries.PAINTING_VARIANT))
             entries.addAll(provider.lookupOrThrow(Registries.DAMAGE_TYPE))
             entries.addEverything(provider.lookupOrThrow(DeteratoxinRegistries.KNIFE_INGREDIENT))
         }
 
         fun <T : Any> Entries.addEverything(registry: RegistryLookup<T>): MutableList<Holder<T>> {
-            return registry.listElementIds().map { add(registry, it) }.toList()
+            return registry.listElementIds().map { add(registry, it) }.toList().toMutableList()
         }
 
     }
+
 }

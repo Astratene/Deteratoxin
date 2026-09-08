@@ -44,6 +44,7 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 
+// TODO fix durability and make it configurable
 class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
 
 
