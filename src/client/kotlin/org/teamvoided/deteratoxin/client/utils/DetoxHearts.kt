@@ -9,7 +9,7 @@ import net.minecraft.util.Mth
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
 import org.teamvoided.deteratoxin.Deteratoxin.id
-import org.teamvoided.deteratoxin.effects.DeteratoxinBasicEffect
+import org.teamvoided.deteratoxin.effects.DeteratoxinEffect
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getPotent
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getImmunityHearts
 import org.teamvoided.deteratoxin.init.DeteratoxinEffects
@@ -56,7 +56,7 @@ object DetoxHearts {
 
         hearts.set(deteratoxin.amplifier + 1)
         val healthAttribute = player.getAttribute(Attributes.MAX_HEALTH) ?: return
-        val detoxModifier = healthAttribute.getModifier(DeteratoxinBasicEffect.DETOX_ATTRIBUTE) ?: return
+        val detoxModifier = healthAttribute.getModifier(DeteratoxinEffect.DETOX_ATTRIBUTE) ?: return
 
         val unmodifiedMaxHealth = (healthAttribute.getValue() + (detoxModifier.amount() * -1f)).toFloat()
         if (displayHealth <= unmodifiedMaxHealth) {

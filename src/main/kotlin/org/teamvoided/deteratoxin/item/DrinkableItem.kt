@@ -15,49 +15,41 @@ import net.minecraft.world.level.Level
 import org.teamvoided.deteratoxin.Deteratoxin
 import org.teamvoided.deteratoxin.data.registry.DeteratoxinDamageTypes
 import org.teamvoided.deteratoxin.util.customDamage
+import org.teamvoided.deteratoxin.util.giveItem
 
-class DrinkableItem(properties: Item.Properties) : Item(properties) {
-    override fun getUseAnimation(itemStack: ItemStack): UseAnim {
-        return UseAnim.DRINK
-    }
+class DrinkableItem(properties: Properties) : Item(properties) {
 
-    override fun getEatingSound(): SoundEvent? {
-        return SoundEvents.HONEY_DRINK
-    }
+    override fun getUseAnimation(itemStack: ItemStack): UseAnim = UseAnim.DRINK
 
-    override fun getDrinkingSound(): SoundEvent? {
-        return SoundEvents.HONEY_DRINK
-    }
+    override fun getEatingSound(): SoundEvent = SoundEvents.HONEY_DRINK
 
-    override fun finishUsingItem(itemStack: ItemStack, level: Level, livingEntity: LivingEntity): ItemStack {
-        super.finishUsingItem(itemStack, level, livingEntity)
-        if (livingEntity is ServerPlayer) {
-            CriteriaTriggers.CONSUME_ITEM.trigger(livingEntity, itemStack)
-            livingEntity.awardStat(Stats.ITEM_USED.get(this))
+    override fun getDrinkingSound(): SoundEvent = SoundEvents.HONEY_DRINK
+
+    override fun getUseDuration(stack: ItemStack, user: LivingEntity): Int = 20
+
+    override fun finishUsingItem(stack: ItemStack, level: Level, user: LivingEntity): ItemStack {
+        super.finishUsingItem(stack, level, user)
+        if (user is ServerPlayer) {
+            CriteriaTriggers.CONSUME_ITEM.trigger(user, stack)
+            user.awardStat(Stats.ITEM_USED.get(this))
         }
 
         if (!level.isClientSide && Deteratoxin.config.drinkingDeteratoxinKillsYou) {
-            val random = level.random.nextInt(1, 4)
-            val damageType =
-                if (random == 1) DeteratoxinDamageTypes.DETOX else if (random == 2) DeteratoxinDamageTypes.DRINKNT else DeteratoxinDamageTypes.DRINKETH
-            livingEntity.customDamage(damageType, 100000f)
-        }
-
-        if (itemStack.isEmpty()) {
-            return ItemStack(Items.GLASS_BOTTLE)
-        } else {
-            if (livingEntity is Player && !livingEntity.hasInfiniteMaterials()) {
-                val itemStack2 = ItemStack(Items.GLASS_BOTTLE)
-                if (!livingEntity.getInventory().add(itemStack2)) {
-                    livingEntity.drop(itemStack2, false)
-                }
+            val damageType = when (level.random.nextInt(1, 4)) {
+                1 -> DeteratoxinDamageTypes.DETOX
+                2 -> DeteratoxinDamageTypes.DRINKNT
+                else -> DeteratoxinDamageTypes.DRINKETH
             }
-
-            return itemStack
+            user.customDamage(damageType, 100_000f)
         }
+
+        if (stack.isEmpty) {
+            return ItemStack(Items.GLASS_BOTTLE)
+        }
+        if (user is Player && !user.hasInfiniteMaterials()) {
+            user.giveItem(ItemStack(Items.GLASS_BOTTLE))
+        }
+        return stack
     }
 
-    override fun getUseDuration(itemStack: ItemStack, livingEntity: LivingEntity): Int {
-        return 20
-    }
 }

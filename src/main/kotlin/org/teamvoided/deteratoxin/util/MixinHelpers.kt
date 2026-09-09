@@ -16,14 +16,11 @@ import org.teamvoided.deteratoxin.init.DeteratoxinEffects
 import kotlin.math.max
 
 fun tickImmunity(entity: LivingEntity) {
-    val deteratoxinEffect = entity.activeEffects.filter { it.effect.value() == DeteratoxinEffects.DETERATOXIN.value() }
+    val deteratoxinEffect = entity.getEffect(DeteratoxinEffects.DETERATOXIN)
     val potentDeteratoxin = entity.getPotent()
     var immunity = entity.getImmunity()
-    if (deteratoxinEffect.isNotEmpty() && immunity <= 13000) {
-        for (effect in deteratoxinEffect) {
-            val amp = effect.amplifier + 1
-            immunity += amp
-        }
+    if (deteratoxinEffect != null && immunity <= 13000) {
+        immunity += deteratoxinEffect.amplifier + 1
     }
     if (potentDeteratoxin > 0 && immunity > 12000) {
         if (immunity > 16000) {
@@ -31,19 +28,13 @@ fun tickImmunity(entity: LivingEntity) {
                 immunity += potentDeteratoxin * 600
             }
             if (!entity.level().isClientSide) {
-                entity.addEffect(
-                    MobEffectInstance(
-                        DeteratoxinEffects.DETERATOXIN,
-                        600,
-                        max(potentDeteratoxin / 2, 1)
-                    )
-                )
+                entity.addEffect(MobEffectInstance(DeteratoxinEffects.DETERATOXIN, 600, max(potentDeteratoxin / 2, 1)))
             }
             entity.clearPotent()
         }
         immunity += potentDeteratoxin
     }
-    if (potentDeteratoxin <= 0 && deteratoxinEffect.isEmpty()) {
+    if (potentDeteratoxin <= 0 && deteratoxinEffect == null) {
         if (immunity < 2000) {
             immunity -= 5
         } else {
@@ -58,22 +49,22 @@ fun tickImmunity(entity: LivingEntity) {
 }
 
 fun tickDeteratoxin(entity: LivingEntity) {
-    if (entity.getPotent() > 0) {
+    var potent = entity.getPotent()
+    if (potent > 0) {
         entity.setPotentCooldown(entity.getPotentCooldown() - 1)
         if (entity.getPotentCooldown() <= 0) {
-            entity.setPotent(entity.getPotent() - 1)
-            if (entity.getPotent() <= 0) {
+            potent--
+            if (potent <= 0) {
                 entity.clearPotent()
                 return
             } else {
+                entity.setPotent(potent)
                 entity.setPotentCooldown(600)
             }
         }
     }
-    if (entity.getPotent() > 0 || entity.getImmunityHearts() > 0) {
-        if (entity.health > entity.getEffectiveMaxHeath()) {
-            entity.customDamage(DeteratoxinDamageTypes.DETERIORATED, entity.health - entity.getEffectiveMaxHeath())
-        }
+    if (entity.health > entity.getEffectiveMaxHeath()) {
+        entity.customDamage(DeteratoxinDamageTypes.DETERIORATED, entity.health - entity.getEffectiveMaxHeath())
     }
 }
 

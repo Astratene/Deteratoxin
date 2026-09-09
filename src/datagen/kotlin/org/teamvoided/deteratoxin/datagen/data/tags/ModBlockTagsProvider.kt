@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture
 class ModBlockTagsProvider(o: FabricDataOutput, p: CompletableFuture<HolderLookup.Provider>) : BlockTagProvider(o, p) {
 
     override fun addTags(lookup: HolderLookup.Provider) {
-        getOrCreateTagBuilder(DeteratoxinBlockTags.LILY_PLACABLE)
+        getOrCreateTagBuilder(DeteratoxinBlockTags.SUPPORTS_LILY)
             .forceAddTag(BlockTags.SCULK_REPLACEABLE_WORLD_GEN)
             .forceAddTag(BlockTags.LOGS)
     }

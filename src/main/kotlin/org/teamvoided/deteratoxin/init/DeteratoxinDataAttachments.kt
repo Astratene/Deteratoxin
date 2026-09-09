@@ -12,8 +12,6 @@ import java.util.function.Consumer
 @Suppress("UnstableApiUsage")
 object DeteratoxinDataAttachments {
 
-    fun init() = Unit
-
     @JvmField
     val IMMUNITY = register("immunity") {
         it
@@ -21,8 +19,8 @@ object DeteratoxinDataAttachments {
             .copyOnDeath()
             .syncWith(ByteBufCodecs.INT, targetOnly())
     }
-    val POTENT_DETERATOXIN = register("potent_deteratoxin")
-    val DETOX_COOLDOWN = register("detox_cooldown")
+    val POTENT_DETERATOXIN = registerInt("potent_deteratoxin")
+    val DETOX_COOLDOWN = registerInt("detox_cooldown")
 
     // region Helpers
     fun LivingEntity.getImmunity(): Int = getAttachedOrElse(IMMUNITY, 0)
@@ -51,7 +49,9 @@ object DeteratoxinDataAttachments {
     }
     // endregion
 
-    fun register(id: String): AttachmentType<Int> {
+    fun init() = Unit
+
+    fun registerInt(id: String): AttachmentType<Int> {
         return register(id) {
             it
                 .persistent(Codec.INT)

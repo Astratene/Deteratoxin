@@ -7,13 +7,13 @@ import org.teamvoided.deteratoxin.util.key
 
 object DeteratoxinDamageTypes {
 
-    val STABBED = create("stabbed")
+    val STABBED = key("stabbed")
 
-    val DETOX = create("detox")
-    val DRINKNT = create("drinknt")
-    val DRINKETH = create("drinketh")
-    val DETERIORATED = create("deteriorated")
+    val DETOX = key("detox")
+    val DRINKNT = key("drinknt")
+    val DRINKETH = key("drinketh")
+    val DETERIORATED = key("deteriorated")
 
-    fun create(id: String) = Registries.DAMAGE_TYPE.key(Deteratoxin.id(id))
+    fun key(id: String) = Registries.DAMAGE_TYPE.key(Deteratoxin.id(id))
 
 }

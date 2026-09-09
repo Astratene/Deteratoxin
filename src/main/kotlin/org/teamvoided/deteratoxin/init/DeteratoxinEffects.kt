@@ -7,7 +7,7 @@ import net.minecraft.world.effect.MobEffectCategory
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import org.teamvoided.deteratoxin.Deteratoxin.id
-import org.teamvoided.deteratoxin.effects.DeteratoxinBasicEffect
+import org.teamvoided.deteratoxin.effects.DeteratoxinEffect
 import org.teamvoided.deteratoxin.effects.PotentDeteratoxinEffect
 import org.teamvoided.deteratoxin.util.registerHolder
 
@@ -15,10 +15,10 @@ object DeteratoxinEffects {
 
     @JvmField
     val DETERATOXIN = register(
-        "deteratoxin", DeteratoxinBasicEffect(MobEffectCategory.HARMFUL, 0xdb2d00)
+        "deteratoxin", DeteratoxinEffect(MobEffectCategory.HARMFUL, 0xdb2d00)
             .addAttributeModifier(
-                Attributes.MAX_HEALTH, DeteratoxinBasicEffect.DETOX_ATTRIBUTE,
-                (-1.0), AttributeModifier.Operation.ADD_VALUE
+                Attributes.MAX_HEALTH, DeteratoxinEffect.DETOX_ATTRIBUTE,
+                -1.0, AttributeModifier.Operation.ADD_VALUE
             )
     )
 

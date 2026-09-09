@@ -9,26 +9,22 @@ import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setPotentCoold
 import org.teamvoided.deteratoxin.init.DeteratoxinEffects
 import org.teamvoided.deteratoxin.util.customDamage
 
-class PotentDeteratoxinEffect(type: MobEffectCategory, color: Int) : DeteratoxinBasicEffect(type, color) {
+class PotentDeteratoxinEffect(type: MobEffectCategory, color: Int) : DeteratoxinEffect(type, color) {
 
-    override fun shouldApplyEffectTickThisTick(i: Int, j: Int): Boolean {
-        return true
-    }
+    override fun isInstantenous(): Boolean = true
+
+    override fun shouldApplyEffectTickThisTick(i: Int, j: Int): Boolean = true
 
     override fun applyEffectTick(entity: LivingEntity, amplifier: Int): Boolean {
-        val existingDetox = entity.getPotent()
-        val hp = ((entity.maxHealth - existingDetox) - (amplifier + 1))
-        if (entity.health > hp) {
-            val damage = entity.health - hp
-            entity.customDamage(DeteratoxinDamageTypes.DETERIORATED, damage)
+        val potent = entity.getPotent()
+        val effectiveMaxHealth = (entity.maxHealth - potent) - (amplifier + 1)
+        if (entity.health > effectiveMaxHealth) {
+            entity.customDamage(DeteratoxinDamageTypes.DETERIORATED, entity.health - effectiveMaxHealth)
         }
-        entity.setPotent(existingDetox + amplifier)
+        entity.setPotent(potent + amplifier)
         entity.setPotentCooldown(600)
         entity.removeEffect(DeteratoxinEffects.POTENT_DETERATOXIN)
         return true
     }
 
-    override fun isInstantenous(): Boolean {
-        return true
-    }
 }

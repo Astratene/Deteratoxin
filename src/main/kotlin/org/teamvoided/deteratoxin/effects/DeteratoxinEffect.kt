@@ -4,7 +4,7 @@ import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectCategory
 import org.teamvoided.deteratoxin.Deteratoxin.id
 
-open class DeteratoxinBasicEffect : MobEffect {
+open class DeteratoxinEffect : MobEffect {
 
     constructor(type: MobEffectCategory, color: Int) : super(type, color)
 

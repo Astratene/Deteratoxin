@@ -16,4 +16,5 @@ public class FoodDataMixin {
     public boolean tick(boolean original, Player Player) {
         return original && allowHealing(Player);
     }
+    
 }

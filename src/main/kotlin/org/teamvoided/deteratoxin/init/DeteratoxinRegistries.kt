@@ -8,9 +8,7 @@ import org.teamvoided.deteratoxin.item.KnifeIngredient
 
 object DeteratoxinRegistries {
 
-    // Dyn Registries
     val KNIFE_INGREDIENT = key<KnifeIngredient>("knife_ingredient")
-
 
     fun init() {
         DynamicRegistries.registerSynced(KNIFE_INGREDIENT, KnifeIngredient.DIRECT_CODEC)

@@ -9,24 +9,29 @@ import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfi
 import org.teamvoided.deteratoxin.data.tags.DeteratoxinBlockTags
 
 class StarletteLilyFlower(codec: Codec<BlockStateConfiguration>) : Feature<BlockStateConfiguration>(codec) {
+
     override fun place(featurePlaceContext: FeaturePlaceContext<BlockStateConfiguration>): Boolean {
         val config = featurePlaceContext.config()
-        val rand = featurePlaceContext.random()
-        val blockPos = featurePlaceContext.origin()
-        val world = featurePlaceContext.level()
+        val random = featurePlaceContext.random()
+        val originPos = featurePlaceContext.origin()
+        val level = featurePlaceContext.level()
         var success = false
-        val xz = 10
-        val y = 10
-        repeat(50) {
-            val pos = blockPos.offset(
-                rand.nextInt(xz) * 2 - xz,
-                rand.nextInt(y) * 2 - y,
-                rand.nextInt(xz) * 2 - xz
+        // Make in to config and export to reef later
+        val xzSpread = 10
+        val ySpread = 10
+        val attempts = 50
+        val canPlaceOnTag = DeteratoxinBlockTags.SUPPORTS_LILY
+        repeat(attempts) {
+            val pos = originPos.offset(
+                // use this instead? - random.nextInt(-xzSpread, xzSpread)
+                random.nextInt(xzSpread) * 2 - xzSpread,
+                random.nextInt(ySpread) * 2 - ySpread,
+                random.nextInt(xzSpread) * 2 - xzSpread
             )
-            if (world.getBlockState(pos).isAir) {
+            if (level.getBlockState(pos).isAir) {
                 for (dir in Direction.entries.shuffled()) {
-                    if (world.getBlockState(pos.offset(dir.normal)).`is`(DeteratoxinBlockTags.LILY_PLACABLE)) {
-                        world.setBlock(pos, config.state.trySetValue(BlockStateProperties.FACING, dir.opposite), 3)
+                    if (level.getBlockState(pos.offset(dir.normal)).`is`(canPlaceOnTag)) {
+                        level.setBlock(pos, config.state.trySetValue(BlockStateProperties.FACING, dir.opposite), 3)
                         success = true
                         break
                     }
@@ -35,4 +40,5 @@ class StarletteLilyFlower(codec: Codec<BlockStateConfiguration>) : Feature<Block
         }
         return success
     }
+
 }

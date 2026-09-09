@@ -9,7 +9,7 @@ import net.minecraft.world.item.Items.*
 import org.teamvoided.deteratoxin.init.DeteratoxinEffects
 import org.teamvoided.deteratoxin.init.DeteratoxinItems
 import org.teamvoided.deteratoxin.item.KnifeIngredient
-import org.teamvoided.deteratoxin.item.KnifeIngredient.Companion.getKey
+import org.teamvoided.deteratoxin.item.KnifeIngredient.Companion.knifeKey
 
 object ModKnifeIngredients : RegistryBootstrapper<KnifeIngredient> {
 
@@ -59,7 +59,7 @@ object ModKnifeIngredients : RegistryBootstrapper<KnifeIngredient> {
     fun BootstrapContext<KnifeIngredient>.knifeIngredient(
         item: Item, effect: Holder<MobEffect>, duration: Int, amplifier: Int
     ) {
-        register(getKey(item), KnifeIngredient(effect, duration, amplifier))
+        register(knifeKey(item), KnifeIngredient(effect, duration, amplifier))
     }
 
 }
