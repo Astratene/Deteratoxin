@@ -12,8 +12,8 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
-import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.clearPotent
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.clearImmunity
+import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.clearPotent
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setImmunity
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setPotent
 

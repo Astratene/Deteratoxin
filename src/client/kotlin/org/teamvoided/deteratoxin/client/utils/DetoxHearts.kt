@@ -10,8 +10,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
 import org.teamvoided.deteratoxin.Deteratoxin.id
 import org.teamvoided.deteratoxin.effects.DeteratoxinEffect
-import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getPotent
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getImmunityHearts
+import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getPotent
 import org.teamvoided.deteratoxin.init.DeteratoxinEffects
 
 object DetoxHearts {

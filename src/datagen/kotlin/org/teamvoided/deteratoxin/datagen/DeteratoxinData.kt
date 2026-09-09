@@ -11,9 +11,9 @@ import net.minecraft.core.RegistrySetBuilder
 import net.minecraft.core.registries.Registries
 import org.teamvoided.deteratoxin.Deteratoxin
 import org.teamvoided.deteratoxin.Deteratoxin.log
-import org.teamvoided.deteratoxin.datagen.data.ModRecipeProvider
 import org.teamvoided.deteratoxin.datagen.assets.ModEnLangProvider
 import org.teamvoided.deteratoxin.datagen.assets.ModModelProvider
+import org.teamvoided.deteratoxin.datagen.data.ModRecipeProvider
 import org.teamvoided.deteratoxin.datagen.data.registry.ModDamageTypes
 import org.teamvoided.deteratoxin.datagen.data.registry.ModKnifeIngredients
 import org.teamvoided.deteratoxin.datagen.data.tags.ModBlockTagsProvider

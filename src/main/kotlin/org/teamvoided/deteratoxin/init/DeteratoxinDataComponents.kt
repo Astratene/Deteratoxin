@@ -2,10 +2,6 @@ package org.teamvoided.deteratoxin.init
 
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.network.codec.ByteBufCodecs
-import net.minecraft.util.ExtraCodecs
-import net.minecraft.world.effect.MobEffect.CODEC
-import net.minecraft.world.effect.MobEffect.STREAM_CODEC
 import org.teamvoided.deteratoxin.Deteratoxin.id
 import org.teamvoided.deteratoxin.components.ImbuedEffect
 import org.teamvoided.deteratoxin.components.KnifeData
@@ -29,15 +25,6 @@ object DeteratoxinDataComponents {
     }
 
     fun init() = Unit
-
-    fun registerInt(name: String): DataComponentType<Int> {
-        return register(name) {
-            it
-                .persistent(ExtraCodecs.NON_NEGATIVE_INT)
-                .networkSynchronized(ByteBufCodecs.VAR_INT)
-                .build()
-        }
-    }
 
     fun <T> register(
         name: String, build: (DataComponentType.Builder<T>) -> DataComponentType<T>,

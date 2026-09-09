@@ -3,21 +3,17 @@ package org.teamvoided.deteratoxin.init
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.world.item.BlockItem
-import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties.ofFullCopy
 import org.teamvoided.deteratoxin.Deteratoxin.id
 import org.teamvoided.deteratoxin.block.StarletteLilyBlock
-import org.teamvoided.deteratoxin.util.getModEntries
 import org.teamvoided.deteratoxin.util.key
 import org.teamvoided.deteratoxin.util.register
 import java.util.function.Function
 
 object DeteratoxinBlocks {
-
-    val BLOCKS get() = getModEntries(BuiltInRegistries.BLOCK)
 
     val STARLETTE_LILY = register(
         "starlette_lily", ::StarletteLilyBlock,
