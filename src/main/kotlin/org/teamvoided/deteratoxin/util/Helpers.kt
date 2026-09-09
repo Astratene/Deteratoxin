@@ -8,13 +8,17 @@ import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.core.Direction
 import net.minecraft.core.Holder
 import net.minecraft.core.Registry
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.TagKey
+import net.minecraft.util.StringUtil
 import net.minecraft.world.damagesource.DamageType
+import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.CreativeModeTab
@@ -89,4 +93,27 @@ fun modifyTab(tab: ResourceKey<CreativeModeTab>, modifyEntries: FabricItemGroupE
 
 fun Player.playPlayerSound(event: SoundEvent) {
     level().playSound(null, this.x, this.y, this.z, event, SoundSource.PLAYERS, 2.0F, 2.0f)
+}
+
+
+fun getEffectTooltip(effect: MobEffect, amplifier: Int, duration: Int, tickRate: Float): MutableComponent {
+    var effectText = Component.translatable(effect.descriptionId)
+    if (amplifier > 0) {
+        effectText = Component.translatable(
+            "potion.withAmplifier", effectText, Component.translatable("potion.potency.$amplifier")
+        )
+    }
+    if (duration > 10) {
+        effectText = Component.translatable(
+            "potion.withDuration", effectText, formatDuration(duration, tickRate)
+        )
+    }
+    return effectText.withStyle(effect.category.tooltipFormatting)
+}
+
+fun formatDuration(duration: Int, tickRate: Float): MutableComponent {
+    return if (duration == -1)
+        Component.translatable("effect.duration.infinite")
+    else
+        Component.literal(StringUtil.formatTickDuration(duration, tickRate))
 }

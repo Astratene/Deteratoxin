@@ -14,6 +14,7 @@ import net.minecraft.util.FastColor.ARGB32
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import org.teamvoided.deteratoxin.Deteratoxin.MODID
+import org.teamvoided.deteratoxin.Deteratoxin.config
 import org.teamvoided.deteratoxin.Deteratoxin.id
 import org.teamvoided.deteratoxin.client.init.DeteratoxinParticlesClient
 import org.teamvoided.deteratoxin.init.DeteratoxinBlocks
@@ -22,6 +23,7 @@ import org.teamvoided.deteratoxin.init.DeteratoxinDataComponents.KNIFE_DATA
 import org.teamvoided.deteratoxin.init.DeteratoxinEntities
 import org.teamvoided.deteratoxin.init.DeteratoxinItems
 import org.teamvoided.deteratoxin.item.KnifeIngredient.Companion.getKnifeIngredient
+import org.teamvoided.deteratoxin.util.getEffectTooltip
 
 object DeteratoxinClient {
 
@@ -48,11 +50,16 @@ object DeteratoxinClient {
         if (!player.inventory.contains { it.`is`(DeteratoxinItems.KNIFE) }) {
             return
         }
-        @Suppress("UnusedVariable", "unused")
-        val ingredient = ctx.registries()?.getKnifeIngredient(stack) ?: return
-        val text = Component.translatable(INGREDIENT_TOOLTIP).withStyle(ChatFormatting.GRAY)
-        if (tooltip.isNotEmpty()) tooltip.add(1, text) else tooltip.addLast(text)
-        // TODO show creative / dev mode players effects?
+        val ingredient = ctx.registries()?.getKnifeIngredient(stack)?.value() ?: return
+        val text = mutableListOf(Component.translatable(INGREDIENT_TOOLTIP).withStyle(ChatFormatting.GRAY))
+
+        if (config.canRenderTooltip(player.hasInfiniteMaterials())) {
+            text.add(
+                getEffectTooltip(ingredient.effect.value(), ingredient.amplifier, ingredient.duration, ctx.tickRate())
+            )
+        }
+
+        if (tooltip.isNotEmpty()) tooltip.addAll(1, text) else tooltip.addAll(text)
     }
 
     fun getKnifeColor(stack: ItemStack, layer: Int): Int {

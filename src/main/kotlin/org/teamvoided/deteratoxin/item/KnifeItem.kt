@@ -3,14 +3,12 @@ package org.teamvoided.deteratoxin.item
 
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags
 import net.minecraft.ChatFormatting
-import net.minecraft.core.Holder
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
-import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlotGroup
@@ -34,12 +32,11 @@ import org.teamvoided.deteratoxin.init.DeteratoxinDataComponents.KNIFE_DATA
 import org.teamvoided.deteratoxin.init.DeteratoxinEffects
 import org.teamvoided.deteratoxin.item.KnifeIngredient.Companion.getKnifeIngredient
 import org.teamvoided.deteratoxin.util.customDamage
+import org.teamvoided.deteratoxin.util.getEffectTooltip
 import org.teamvoided.deteratoxin.util.giveItem
 import org.teamvoided.deteratoxin.util.playPlayerSound
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
 
 // TODO fix durability and make it configurable
@@ -293,26 +290,23 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
             val effect = imbued.effect.value()
             val tickDuration = imbued.duration
             val amplifier = imbued.amplifier
-            val effectName = effect.displayName
-            val duration =
-                (tickDuration / 20).toDuration(DurationUnit.SECONDS).toComponents { _, minutes, seconds, _ ->
-                    "$minutes:${if (seconds < 10) "0" else ""}$seconds"
-                }
+            val color = effect.color
 
             if (effect.isInstantenous) {
                 // `tickDuration` is use in instant effects
                 tooltip.add(
                     Component.translatable(
                         "tooltip.deteratoxin.currentInstantEffect.tooltip",
-                        effectName,
-                        tickDuration
+                        effect.displayName.copy().withColor(color),
+                        Component.literal("$tickDuration").withColor(color)
                     )
                         .withStyle(ChatFormatting.AQUA)
                 )
             } else {
                 tooltip.add(
                     Component.translatable(
-                        "tooltip.deteratoxin.currentEffect.tooltip", effectName, amplifier + 1, duration
+                        "tooltip.deteratoxin.currentEffect.tooltip",
+                        getEffectTooltip(effect, amplifier, tickDuration, ctx.tickRate()).withColor(color)
                     ).withStyle(ChatFormatting.AQUA)
                 )
             }
@@ -334,11 +328,6 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
 
     fun ItemStack.removeImbued() {
         set(IMBUED_EFFECT, null)
-    }
-
-    @Deprecated("delete asp")
-    fun applyImbuedToKnife(stack: ItemStack, effect: Holder<MobEffect>, dur: Int, amp: Int) {
-        stack.set(IMBUED_EFFECT, ImbuedEffect(effect, dur, amp))
     }
 
     // Automatically removed itself if duration is 0

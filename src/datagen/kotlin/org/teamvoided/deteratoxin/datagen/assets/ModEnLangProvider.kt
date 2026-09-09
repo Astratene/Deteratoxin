@@ -34,7 +34,7 @@ class ModEnLangProvider(var output: FabricDataOutput, p: CompletableFuture<Holde
         )
         gen.add(
             "tooltip.deteratoxin.currentEffect.tooltip",
-            "Current Effect: %s %s (%s)"
+            "Current Effect: %s"
         )
         gen.add(
             "tooltip.deteratoxin.currentInstantEffect.tooltip",
