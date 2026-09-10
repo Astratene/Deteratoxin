@@ -17,9 +17,11 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.TagKey
 import net.minecraft.util.StringUtil
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.ItemStack
@@ -117,3 +119,5 @@ fun formatDuration(duration: Int, tickRate: Float): MutableComponent {
     else
         Component.literal(StringUtil.formatTickDuration(duration, tickRate))
 }
+
+fun InteractionHand.toSlot() = if (this == InteractionHand.MAIN_HAND) EquipmentSlot.MAINHAND else EquipmentSlot.OFFHAND

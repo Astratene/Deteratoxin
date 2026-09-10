@@ -10,6 +10,8 @@ class DeteratoxinConfig : Config(id(MODID)) {
 
     var drinkingDeteratoxinKillsYou = false
 
+    var enableDurability = true
+
     @NonSync
     var tooltipRendersEffects = TooltipType.NEVER
 

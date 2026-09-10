@@ -3,6 +3,7 @@ package org.teamvoided.deteratoxin.item
 
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags
 import net.minecraft.ChatFormatting
+import net.minecraft.core.BlockPos
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvents
@@ -10,10 +11,7 @@ import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.effect.MobEffectInstance
-import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EquipmentSlotGroup
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.SlotAccess
+import net.minecraft.world.entity.*
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
@@ -22,24 +20,22 @@ import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.*
 import net.minecraft.world.item.component.ItemAttributeModifiers
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.BlockState
+import org.teamvoided.deteratoxin.Deteratoxin.config
 import org.teamvoided.deteratoxin.components.ImbuedEffect
-import org.teamvoided.deteratoxin.components.KnifeData
-import org.teamvoided.deteratoxin.components.KnifeData.Companion.getKnifeData
+import org.teamvoided.deteratoxin.components.ReadyTime.Companion.readied
+import org.teamvoided.deteratoxin.components.ReadyTime.Companion.setReadyTicks
 import org.teamvoided.deteratoxin.data.registry.DeteratoxinDamageTypes
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.getImmunity
 import org.teamvoided.deteratoxin.init.DeteratoxinDataComponents.IMBUED_EFFECT
-import org.teamvoided.deteratoxin.init.DeteratoxinDataComponents.KNIFE_DATA
+import org.teamvoided.deteratoxin.init.DeteratoxinDataComponents.READY_TIME
 import org.teamvoided.deteratoxin.init.DeteratoxinEffects
 import org.teamvoided.deteratoxin.item.KnifeIngredient.Companion.getKnifeIngredient
-import org.teamvoided.deteratoxin.util.customDamage
-import org.teamvoided.deteratoxin.util.getEffectTooltip
-import org.teamvoided.deteratoxin.util.giveItem
-import org.teamvoided.deteratoxin.util.playPlayerSound
+import org.teamvoided.deteratoxin.util.*
 import kotlin.math.max
 import kotlin.math.min
 
 
-// TODO fix durability and make it configurable
 class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
 
     fun tryApplyEffects(
@@ -47,7 +43,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
     ): Boolean {
         val imbued = refImbued.copy()
 
-        stack.set(KNIFE_DATA, null)
+        stack.setReadyTicks(null)
         if (imbued.isInstantenous()) {
             val isPotent = imbued.effect.value() == DeteratoxinEffects.POTENT_DETERATOXIN.value()
             target.addEffect(MobEffectInstance(imbued.effect, 1, if (isPotent) 3 else 0))
@@ -96,12 +92,15 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
         return false
     }
 
-    override fun hurtEnemy(stack: ItemStack, target: LivingEntity, user: LivingEntity): Boolean {
-        val imbued = stack.get(IMBUED_EFFECT)
-        if (imbued != null && stack.getKnifeData().readied()) {
-            if (tryApplyEffects(stack, target, user, imbued)) {
+    override fun hurtEnemy(knife: ItemStack, target: LivingEntity, user: LivingEntity): Boolean = true
+
+    override fun postHurtEnemy(knife: ItemStack, target: LivingEntity, user: LivingEntity) {
+        super.postHurtEnemy(knife, target, user)
+        val imbued = knife.get(IMBUED_EFFECT)
+        if (imbued != null && knife.readied()) {
+            if (tryApplyEffects(knife, target, user, imbued)) {
                 if (user is Player) {
-                    user.cooldowns.addCooldown(stack.item, 450)
+                    user.cooldowns.addCooldown(knife.item, 450)
                 }
                 user.level().playSound(
                     null,
@@ -111,27 +110,28 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                 )
             }
         }
-        return super.hurtEnemy(stack, target, user)
+        knife.hurtIfAllowed(user, EquipmentSlot.MAINHAND)
     }
 
     override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (!player.level().isClientSide) {
-            val stack = player.getItemInHand(hand)
-            val imbued = stack.get(IMBUED_EFFECT)
+            val knife = player.getItemInHand(hand)
+            val imbued = knife.get(IMBUED_EFFECT)
             if (imbued != null) {
-                if (stack.getKnifeData().readied()) {
-                    if (tryApplyEffects(stack, player, player, imbued)) {
+                if (knife.readied()) {
+                    if (tryApplyEffects(knife, player, player, imbued)) {
                         //TODO blood particles maybe?
                         player.customDamage(DeteratoxinDamageTypes.STABBED, 5f, player, player)
                         player.playPlayerSound(SoundEvents.SILVERFISH_DEATH)
-                        player.cooldowns.addCooldown(stack.item, 450)
+                        player.cooldowns.addCooldown(knife.item, 450)
+                        knife.hurtIfAllowed(player, hand.toSlot())
                     }
                 } else {
-                    stack.set(KNIFE_DATA, KnifeData(100))
-                    player.cooldowns.addCooldown(stack.item, 5)
+                    knife.setReadyTicks(100)
+                    player.cooldowns.addCooldown(knife.item, 5)
                     player.playPlayerSound(SoundEvents.VAULT_INSERT_ITEM)
                 }
-                return InteractionResultHolder.sidedSuccess(stack, player.level().isClientSide)
+                return InteractionResultHolder.sidedSuccess(knife, player.level().isClientSide)
             }
         }
         return super.use(level, player, hand)
@@ -139,12 +139,12 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
 
     override fun inventoryTick(stack: ItemStack, level: Level, entity: Entity, slot: Int, selected: Boolean) {
         super.inventoryTick(stack, level, entity, slot, selected)
-        val readyData = stack.get(KNIFE_DATA)
-        if (readyData != null) {
-            if (readyData.readied()) {
-                stack.set(KNIFE_DATA, KnifeData(readyData.readyTime - 1))
+        val readyTime = stack.get(READY_TIME)
+        if (readyTime != null) {
+            if (readyTime.readied()) {
+                stack.setReadyTicks(readyTime.ticks - 1)
             } else {
-                stack.set(KNIFE_DATA, null)
+                stack.setReadyTicks(null)
                 if (entity is Player && !entity.cooldowns.isOnCooldown(stack.item)) {
                     entity.cooldowns.addCooldown(stack.item, 160)
                 }
@@ -281,9 +281,9 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
     }
 
     override fun appendHoverText(
-        stack: ItemStack, ctx: TooltipContext, tooltip: MutableList<Component>, flag: TooltipFlag,
+        knife: ItemStack, ctx: TooltipContext, tooltip: MutableList<Component>, flag: TooltipFlag,
     ) {
-        val imbued = stack.get(IMBUED_EFFECT)
+        val imbued = knife.get(IMBUED_EFFECT)
         if (imbued == null) {
             tooltip.add(Component.translatable("tooltip.deteratoxin.empty.tooltip").withStyle(ChatFormatting.GRAY))
         } else {
@@ -310,7 +310,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
                     ).withStyle(ChatFormatting.AQUA)
                 )
             }
-            if (stack.getKnifeData().readied()) {
+            if (knife.readied()) {
                 tooltip.add(
                     Component.translatable("tooltip.deteratoxin.instructionToStab.tooltip")
                         .withStyle(ChatFormatting.GRAY)
@@ -323,7 +323,7 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
             }
         }
 
-        super.appendHoverText(stack, ctx, tooltip, flag)
+        super.appendHoverText(knife, ctx, tooltip, flag)
     }
 
     fun ItemStack.removeImbued() {
@@ -333,6 +333,16 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
     // Automatically removed itself if duration is 0
     fun ItemStack.setOrRemoveImbued(imbued: ImbuedEffect) {
         set(IMBUED_EFFECT, if (imbued.duration > 0) imbued else null)
+    }
+
+    fun ItemStack.hurtIfAllowed(user: LivingEntity, slot: EquipmentSlot) {
+        if (config.enableDurability) {
+            hurtAndBreak(1, user, slot)
+        }
+    }
+
+    override fun canAttackBlock(state: BlockState, level: Level, pos: BlockPos, player: Player): Boolean {
+        return !player.isCreative
     }
 
     companion object {

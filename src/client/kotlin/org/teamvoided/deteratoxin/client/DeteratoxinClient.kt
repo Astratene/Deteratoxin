@@ -17,9 +17,9 @@ import org.teamvoided.deteratoxin.Deteratoxin.MODID
 import org.teamvoided.deteratoxin.Deteratoxin.config
 import org.teamvoided.deteratoxin.Deteratoxin.id
 import org.teamvoided.deteratoxin.client.init.DeteratoxinParticlesClient
+import org.teamvoided.deteratoxin.components.ReadyTime.Companion.readied
 import org.teamvoided.deteratoxin.init.DeteratoxinBlocks
 import org.teamvoided.deteratoxin.init.DeteratoxinDataComponents.IMBUED_EFFECT
-import org.teamvoided.deteratoxin.init.DeteratoxinDataComponents.KNIFE_DATA
 import org.teamvoided.deteratoxin.init.DeteratoxinEntities
 import org.teamvoided.deteratoxin.init.DeteratoxinItems
 import org.teamvoided.deteratoxin.item.KnifeIngredient.Companion.getKnifeIngredient
@@ -38,7 +38,7 @@ object DeteratoxinClient {
             if (stack.get(IMBUED_EFFECT) != null) 1f else 0f
         }
         ItemProperties.register(DeteratoxinItems.KNIFE, id("knife_state")) { stack, _, _, _ ->
-            if (stack.get(KNIFE_DATA)?.readied() == true) 1f else 0f
+            if (stack.readied()) 1f else 0f
         }
         ItemTooltipCallback.EVENT.register { stack, ctx, _, tooltip -> appendKnifeTooltip(ctx, stack, tooltip) }
     }

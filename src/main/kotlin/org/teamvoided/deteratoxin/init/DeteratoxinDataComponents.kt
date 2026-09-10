@@ -4,16 +4,15 @@ import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
 import org.teamvoided.deteratoxin.Deteratoxin.id
 import org.teamvoided.deteratoxin.components.ImbuedEffect
-import org.teamvoided.deteratoxin.components.KnifeData
+import org.teamvoided.deteratoxin.components.ReadyTime
 import org.teamvoided.deteratoxin.util.register
 
 object DeteratoxinDataComponents {
 
-    // TODO make be called only in KnifeData.class
-    val KNIFE_DATA = register("knife_data") {
+    val READY_TIME = register("ready_time") {
         it
-            .persistent(KnifeData.CODEC)
-            .networkSynchronized(KnifeData.STREAM_CODEC)
+            .persistent(ReadyTime.CODEC)
+            .networkSynchronized(ReadyTime.STREAM_CODEC)
             .build()
     }
 
