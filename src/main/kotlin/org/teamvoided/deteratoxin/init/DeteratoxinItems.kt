@@ -10,15 +10,12 @@ import net.minecraft.world.item.Item.Properties
 import org.teamvoided.deteratoxin.Deteratoxin.id
 import org.teamvoided.deteratoxin.item.DrinkableItem
 import org.teamvoided.deteratoxin.item.KnifeItem
-import org.teamvoided.deteratoxin.util.getModEntries
 import org.teamvoided.deteratoxin.util.key
 import org.teamvoided.deteratoxin.util.modifyTab
 import java.util.function.Function
 
 
 object DeteratoxinItems {
-
-    val ITEMS get() = getModEntries(BuiltInRegistries.ITEM)
 
     val KNIFE = register(
         "knife", ::KnifeItem,
