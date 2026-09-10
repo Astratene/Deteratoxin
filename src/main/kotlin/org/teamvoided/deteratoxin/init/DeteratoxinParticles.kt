@@ -11,6 +11,7 @@ import org.teamvoided.deteratoxin.util.register
 object DeteratoxinParticles {
 
     val DETOX_POOF: SimpleParticleType = register("detox_poof", simple())
+    val SMALL_DETOX_POOF: SimpleParticleType = register("small_detox_poof", simple())
 
     fun init() = Unit
 

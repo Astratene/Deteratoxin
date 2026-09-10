@@ -15,7 +15,7 @@ object DeteratoxinEffects {
 
     @JvmField
     val DETERATOXIN = register(
-        "deteratoxin", DeteratoxinEffect(MobEffectCategory.HARMFUL, 0xdb2d00)
+        "deteratoxin", DeteratoxinEffect(MobEffectCategory.HARMFUL, 0xdb2d00, DeteratoxinParticles.SMALL_DETOX_POOF)
             .addAttributeModifier(
                 Attributes.MAX_HEALTH, DeteratoxinEffect.DETOX_ATTRIBUTE,
                 -1.0, AttributeModifier.Operation.ADD_VALUE

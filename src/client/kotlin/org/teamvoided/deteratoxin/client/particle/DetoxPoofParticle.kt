@@ -9,7 +9,7 @@ class DetoxPoofParticle(
     world: ClientLevel,
     x: Double, y: Double, z: Double,
     velocityX: Double, velocityY: Double, velocityZ: Double,
-    val provider: SpriteSet,
+    val provider: SpriteSet, small: Boolean = false,
 ) : TextureSheetParticle(world, x, y, z) {
 
     init {
@@ -19,6 +19,12 @@ class DetoxPoofParticle(
         setSpriteFromAge(provider)
         lifetime = 22
         alpha = 0.5f
+        if (small) {
+            xd = random.nextGaussian() * 0.05
+            yd = random.nextGaussian() * 0.02
+            zd = random.nextGaussian() * 0.05
+            lifetime = 11
+        }
     }
 
     override fun tick() {
@@ -41,6 +47,19 @@ class DetoxPoofParticle(
             velocityX: Double, velocityY: Double, velocityZ: Double,
         ): Particle {
             return DetoxPoofParticle(world, x, y, z, velocityX, velocityY, velocityZ, provider)
+        }
+
+    }
+
+    class EffectFactory(val provider: SpriteSet) : ParticleProvider<SimpleParticleType> {
+
+        override fun createParticle(
+            effect: SimpleParticleType,
+            world: ClientLevel,
+            x: Double, y: Double, z: Double,
+            velocityX: Double, velocityY: Double, velocityZ: Double,
+        ): Particle {
+            return DetoxPoofParticle(world, x, y, z, velocityX, velocityY, velocityZ, provider, true)
         }
 
     }

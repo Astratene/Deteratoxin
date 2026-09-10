@@ -11,6 +11,7 @@ object DeteratoxinParticlesClient {
 
     fun init() {
         register(DeteratoxinParticles.DETOX_POOF, DetoxPoofParticle::Factory)
+        register(DeteratoxinParticles.SMALL_DETOX_POOF, DetoxPoofParticle::EffectFactory)
     }
 
     fun <T : ParticleOptions> register(type: ParticleType<T>, factory: PendingParticleFactory<T>) {
