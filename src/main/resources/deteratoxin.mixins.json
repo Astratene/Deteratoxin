@@ -6,7 +6,9 @@
   "mixins": [
     "FoodDataMixin",
     "LivingEntityMixin",
-    "PlayerMixin"
+    "PlayerMixin",
+    "brewing.PotionBrewingMixin",
+    "brewing.PotionSlotMixin"
   ],
   "injectors": {
     "defaultRequire": 1

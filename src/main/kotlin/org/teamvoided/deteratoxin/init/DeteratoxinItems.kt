@@ -28,6 +28,7 @@ object DeteratoxinItems {
             .attributes(KnifeItem.createAttributes(Tiers.NETHERITE, 0, -2.0F))
     )
 
+    @JvmField
     val DETERATOXIN_EXTRACT = register(
         "deteratoxin_extract", ::DrinkableItem,
         Properties()
@@ -36,6 +37,7 @@ object DeteratoxinItems {
             .craftRemainder(Items.GLASS_BOTTLE)
     )
 
+    @JvmField
     val POTENT_DETERATOXIN_EXTRACT = register(
         "potent_deteratoxin_extract", ::DrinkableItem,
         Properties()

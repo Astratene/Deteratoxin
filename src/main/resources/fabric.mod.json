@@ -17,6 +17,12 @@
         "adapter": "kotlin",
         "value": "org.teamvoided.deteratoxin.client.DeteratoxinClient::init"
       }
+    ],
+    "emi": [
+      {
+        "value": "org.teamvoided.deteratoxin.compat.DetoxEMIIntegration",
+        "adapter": "kotlin"
+      }
     ]
   },
   "mixins": [
