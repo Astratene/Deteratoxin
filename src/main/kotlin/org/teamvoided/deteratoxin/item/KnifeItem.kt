@@ -155,15 +155,17 @@ class KnifeItem(settings: Properties) : TieredItem(Tiers.NETHERITE, settings) {
     override fun overrideOtherStackedOnMe(
         knife: ItemStack, ingStack: ItemStack, slot: Slot, action: ClickAction, player: Player, cursorInv: SlotAccess,
     ): Boolean {
-        if ((knife.get(IMBUED_EFFECT)?.duration ?: 0) >= 9600) {
-            player.level()
-                .playLocalSound(player, SoundEvents.VAULT_REJECT_REWARDED_PLAYER, SoundSource.PLAYERS, 1.0f, 2.0f)
-            return true
-        }
+        if (!ingStack.isEmpty && action == ClickAction.SECONDARY) {
+            if ((knife.get(IMBUED_EFFECT)?.duration ?: 0) >= 9600) {
+                player.level()
+                    .playLocalSound(player, SoundEvents.VAULT_REJECT_REWARDED_PLAYER, SoundSource.PLAYERS, 1.0f, 2.0f)
+                return true
+            }
 
-        val imbuedEffect = getStackEffect(ingStack, player)
-        if (imbuedEffect != null) {
-            return thereIsDarknessInMeRightNow(player, knife, ingStack, imbuedEffect, cursorInv)
+            val imbuedEffect = getStackEffect(ingStack, player)
+            if (imbuedEffect != null) {
+                return thereIsDarknessInMeRightNow(player, knife, ingStack, imbuedEffect, cursorInv)
+            }
         }
 
         return super.overrideOtherStackedOnMe(knife, ingStack, slot, action, player, cursorInv)
