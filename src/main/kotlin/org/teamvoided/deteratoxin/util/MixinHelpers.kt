@@ -13,6 +13,7 @@ import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setImmunity
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setPotent
 import org.teamvoided.deteratoxin.init.DeteratoxinDataAttachments.setPotentCooldown
 import org.teamvoided.deteratoxin.init.DeteratoxinEffects
+import org.teamvoided.deteratoxin.init.DeteratoxinParticles
 import kotlin.math.max
 
 fun tickImmunity(entity: LivingEntity) {
@@ -51,6 +52,19 @@ fun tickImmunity(entity: LivingEntity) {
 fun tickDeteratoxin(entity: LivingEntity) {
     var potent = entity.getPotent()
     if (potent > 0) {
+        val random = entity.level().random
+        if (random.nextInt(0, 3) == 1) {
+            val xOff = random.nextGaussian() * 0.5 * 0.5
+            val yOff = random.nextGaussian() * 1 * 0.5
+            val zOff = random.nextGaussian() * 0.5 * 0.5
+            val xd = random.nextGaussian() * 0.01
+            val yd = random.nextGaussian() * 0.01
+            val zd = random.nextGaussian() * 0.01
+            entity.level().addParticle(
+                DeteratoxinParticles.SMALL_POTENT_DETOX_POOF, entity.x + xOff, entity.y + 1 + yOff, entity.z + zOff,
+                xd, yd, zd
+            )
+        }
         entity.setPotentCooldown(entity.getPotentCooldown() - 1)
         if (entity.getPotentCooldown() <= 0) {
             potent--

@@ -26,6 +26,7 @@ object ModKnifeIngredients : RegistryBootstrapper<KnifeIngredient> {
         knifeIngredient(RED_TULIP, MobEffects.WEAKNESS, 140, 0)
         knifeIngredient(WHITE_TULIP, MobEffects.WEAKNESS, 140, 0)
         knifeIngredient(WITHER_ROSE, MobEffects.WITHER, 140, 0)
+        knifeIngredient(LILY_OF_THE_VALLEY, DeteratoxinEffects.DETERATOXIN, 100, 1)
 
         //potion ingredients
         knifeIngredient(SUGAR, MobEffects.MOVEMENT_SPEED, 200, 0)

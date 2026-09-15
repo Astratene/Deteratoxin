@@ -87,11 +87,11 @@ loom {
             it.vmArgs(
                 // If enabled this you can hotswap basally anything
                 // Requires a JetBrains runtime!
-                "-XX:+AllowEnhancedClassRedefinition",
+                //"-XX:+AllowEnhancedClassRedefinition",
                 // If enabled this you can hotswap mixins
                 // Requires you to add MIXIN_PATH to your .env file
                 // Here is how to find the path: https://docs.fabricmc.net/develop/getting-started/intellij-idea/launching-the-game#1-locate-the-mixin-library-jar
-                "-javaagent:${System.getProperty("MIXIN_PATH")}"
+                //"-javaagent:${System.getProperty("MIXIN_PATH")}"
             )
         }
     }
